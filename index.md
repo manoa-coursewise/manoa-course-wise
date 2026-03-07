@@ -145,7 +145,7 @@ $
 
 ## Walkthrough
 
-The following sections describe the major features of this template.
+The following sections describe the major features of this template. It's important that you understand the structure and functionality of this template as you will be using it as the basis for subsequent application experiences and eventually your team final project. You may find it helpful to use AI to explain details or answer questions you may have or to point you to the relevant documentation.
 
 ### Directory structure
 
