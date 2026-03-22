@@ -1,4 +1,6 @@
 name: ci
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 on:
   push:
     branches: [main, master]
@@ -24,8 +26,6 @@ jobs:
         ports:
           - 5432:5432
     
-      env:
-        FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     env:
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/playwright_test
       NEXTAUTH_SECRET: secret
