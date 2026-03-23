@@ -130,6 +130,19 @@ $ npm run dev
 If all goes well, the template application will appear at [http://localhost:3000](http://localhost:3000). You can login using the credentials in [settings.development.json](https://github.com/ics-software-engineering/nextjs-application-template/blob/main/config/settings.development.json), or else register a new account.
 
 
+### ESLint
+You can verify that the code obeys our coding standards by running ESLint over the code in the src/ directory with:
+
+```
+$ npm run lint
+
+> nextjs-application-template-1@0.1.0 lint
+> next lint
+
+✔ No ESLint warnings or errors
+$
+```
+
 ### Building the App
 
 To build the application for production deployment, use the following command:
@@ -147,19 +160,6 @@ $ npm start
 ```
 
 Make sure your environment variables and database are properly configured before building for production.
-
-
-### ESLint
-You can verify that the code obeys our coding standards by running ESLint over the code in the src/ directory with:
-
-```
-$ npm run lint
-
-> nextjs-application-template-1@0.1.0 lint
-> next lint
-
-✔ No ESLint warnings or errors
-$
 
 ### Testing
 This project uses [Playwright](https://playwright.dev/) for end-to-end and authentication testing. Tests are located in the `tests/` directory and cover user flows, authentication, and admin features.
@@ -191,11 +191,6 @@ To view tests in headed mode (see the browser UI):
 ```
 $ npx playwright test --headed
 ```
-
-Test best practices:
-- Tests wait for key UI elements after login to ensure reliability across browsers.
-- Authentication is handled with robust session management and UI checks.
-- See `tests/auth-utils.ts` for custom authentication helpers.
 
 For more information, see the [Playwright documentation](https://playwright.dev/).
 ```
