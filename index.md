@@ -164,8 +164,6 @@ Make sure your environment variables and database are properly configured before
 ### Testing
 This project uses [Playwright](https://playwright.dev/) for end-to-end and authentication testing. Tests are located in the `tests/` directory and cover user flows, authentication, and admin features.
 
-**Important:** The application server must be running before you execute Playwright tests. Start the server in a separate terminal using:
-
 ```
 $ npm run dev
 ```
