@@ -54,6 +54,8 @@ jobs:
         run: npm run lint
       - name: Build Next.js application
         run: npm run build
+      - name: Clean up session files
+        run: rm -rf tests/playwright-auth-sessions/*
       # Playwright should start the server automatically using webServer config
       - name: Run Playwright tests
         run: npm run playwright
