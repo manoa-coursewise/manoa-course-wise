@@ -3,7 +3,7 @@
 import { useSession } from 'next-auth/react'; // v5 compatible
 import { usePathname } from 'next/navigation';
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
-import { BoxArrowRight, Lock, PersonFill, PersonPlusFill } from 'react-bootstrap-icons';
+import { BoxArrowRight, Lock } from 'react-bootstrap-icons';
 
 const NavBar: React.FC = () => {
   const { data: session, status } = useSession();
@@ -11,32 +11,37 @@ const NavBar: React.FC = () => {
   if (status === 'loading') return null;
   const currentUser = session?.user?.email;
   const role = session?.user?.role;
+  
   return (
-    <Navbar bg="light" expand="lg">
+    <Navbar bg="light" expand="lg" sticky="top" className="shadow-sm">
       <Container>
-        <Navbar.Brand href="/">Next.js Application Template</Navbar.Brand>
+        <Navbar.Brand href="/" className="fw-bold" style={{ fontSize: '1.5rem' }}>
+          Mānoa CourseWise
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto justify-content-start">
-            {currentUser && (
-              <>
-                <Nav.Link id="add-stuff-nav" href="/add" active={pathName === '/add'}>
-                  Add Stuff
-                </Nav.Link>
-                <Nav.Link id="list-stuff-nav" href="/list" active={pathName === '/list'}>
-                  List Stuff
-                </Nav.Link>
-              </>
-            )}
+          <Nav className="ms-auto">
+            <Nav.Link href="#search-courses" className="mx-2">
+              Search Courses
+            </Nav.Link>
+            <Nav.Link href="#professors" className="mx-2">
+              Professors
+            </Nav.Link>
+            <Nav.Link href="#schedule-builder" className="mx-2">
+              Schedule Builder
+            </Nav.Link>
+            <Nav.Link href="#submit-review" className="mx-2">
+              Submit Review
+            </Nav.Link>
             {currentUser && role === 'ADMIN' && (
-              <Nav.Link id="admin-stuff-nav" href="/admin" active={pathName === '/admin'}>
+              <Nav.Link id="admin-stuff-nav" href="/admin" active={pathName === '/admin'} className="mx-2">
                 Admin
               </Nav.Link>
             )}
           </Nav>
-          <Nav>
+          <Nav className="ms-auto">
             {session ? (
-              <NavDropdown id="login-dropdown" title={currentUser}>
+              <NavDropdown id="login-dropdown" title={currentUser} align="end">
                 <NavDropdown.Item id="login-dropdown-sign-out" href="/api/auth/signout">
                   <BoxArrowRight />
                   Sign Out
@@ -47,16 +52,9 @@ const NavBar: React.FC = () => {
                 </NavDropdown.Item>
               </NavDropdown>
             ) : (
-              <NavDropdown id="login-dropdown" title="Login">
-                <NavDropdown.Item id="login-dropdown-sign-in" href="/auth/signin">
-                  <PersonFill />
-                  Sign in
-                </NavDropdown.Item>
-                <NavDropdown.Item id="login-dropdown-sign-up" href="/auth/signup">
-                  <PersonPlusFill />
-                  Sign up
-                </NavDropdown.Item>
-              </NavDropdown>
+              <Nav.Link id="login-btn" href="/auth/signin" className="btn btn-outline-primary mx-2">
+                Log In
+              </Nav.Link>
             )}
           </Nav>
         </Navbar.Collapse>

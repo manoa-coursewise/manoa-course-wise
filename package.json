@@ -12,6 +12,9 @@
     "seed": "npx tsx src/seed.ts",
     "playwright": "npx playwright test"
   },
+  "prisma": {
+    "seed": "tsx src/seed.ts"
+  },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "@prisma/adapter-pg": "^7.4.2",
