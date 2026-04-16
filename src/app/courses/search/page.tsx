@@ -32,10 +32,10 @@ const allCourses = [
     tags: ["Integration Heavy", "Series & Sequences"],
   },
   {
-    code: "ECON 101",
+    code: "ECON 130",
     department: "ECON",
-    title: "Intro to Economics",
-    professor: "Jane Smith",
+    title: "Principles of Microeconomics",
+    professor: "Michael Roberts",
     rating: 4.0,
     reviews: 120,
     difficulty: 3.5,
