@@ -46,7 +46,7 @@ const NavBar: React.FC = () => {
                   <BoxArrowRight />
                   Sign Out
                 </NavDropdown.Item>
-                <NavDropdown.Item id="login-dropdown-change-password" href="/auth/change-password">
+                <NavDropdown.Item id="login-dropdown-change-password" href="/account-details">
                   <Lock />
                   Change Password
                 </NavDropdown.Item>

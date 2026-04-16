@@ -1,21 +1,34 @@
 ﻿'use client';
 
-import { useState, FormEvent } from 'react';
+import { useState, useEffect, FormEvent } from 'react';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Container, Card, Form, Button, Alert, Badge } from 'react-bootstrap';
 
 const AccountDetailsPage = () => {
+  const { data: session, status } = useSession();
   const router = useRouter();
-  const [name, setName] = useState('Jane Doe');
-  const [email, setEmail] = useState('jane.doe@example.com');
+  const [nameEdits, setNameEdits] = useState<string | undefined>(undefined);
+  const [emailEdits, setEmailEdits] = useState<string | undefined>(undefined);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
-  const accountRole = 'Student';
-  const emailVerified = true;
+  const accountRole = session?.user?.role ?? 'Student';
+  const emailVerified = Boolean(session?.user?.email);
   const createdAt = 'August 12, 2024';
   const lastLogin = 'April 16, 2026, 09:24 AM';
+
+  const sessionName = session?.user?.name ?? session?.user?.email ?? '';
+  const sessionEmail = session?.user?.email ?? '';
+  const name = nameEdits ?? sessionName;
+  const email = emailEdits ?? sessionEmail;
+
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/auth/signin');
+    }
+  }, [status, router]);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -36,6 +49,14 @@ const AccountDetailsPage = () => {
   const handleSignOut = () => {
     router.push('/auth/signout');
   };
+
+  if (status === 'loading') {
+    return <p>Loading...</p>;
+  }
+
+  if (!session) {
+    return null;
+  }
 
   return (
     <main className="dashboard-main" style={{ padding: '40px 0' }}>
@@ -74,7 +95,7 @@ const AccountDetailsPage = () => {
                 <Form.Control
                   type="text"
                   value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={(e) => setNameEdits(e.target.value)}
                   placeholder="Your name"
                   disabled={isSaving}
                   required
@@ -86,7 +107,7 @@ const AccountDetailsPage = () => {
                 <Form.Control
                   type="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => setEmailEdits(e.target.value)}
                   placeholder="Your email"
                   disabled={isSaving}
                   required
