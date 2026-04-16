@@ -1,6 +1,6 @@
 'use client';
 
-import UserDashboard from '../../components/UserDashboard';
+import UserDashboard from '../../../components/UserDashboard';
 
 const mockUser = {
   name: 'Jane Doe',
