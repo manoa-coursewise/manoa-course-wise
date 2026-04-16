@@ -45,7 +45,7 @@ const allCourses = [
   },
 ];
 
-export default function App() {
+const SearchCourses = () => {
   const [selectedDepartments, setSelectedDepartments] = useState([
     "ICS",
     "MATH",
@@ -116,3 +116,5 @@ export default function App() {
     </div>
   );
 }
+
+export default SearchCourses;
