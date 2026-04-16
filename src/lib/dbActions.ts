@@ -1,10 +1,29 @@
 'use server';
 
 import { Condition } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { Stuff } from '@prisma/client';
-import { hash } from 'bcrypt';
+import { compare, hash } from 'bcrypt';
 import { redirect } from 'next/navigation';
 import { prisma } from './prisma';
+
+const mapPrismaAuthError = (error: unknown): string => {
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    if (error.code === 'P2002') {
+      return 'EMAIL_EXISTS';
+    }
+    if (error.code === 'P1000') {
+      return 'DB_AUTH_FAILED';
+    }
+    if (error.code === 'P1001') {
+      return 'DB_UNREACHABLE';
+    }
+    if (error.code === 'P1010') {
+      return 'DB_ACCESS_DENIED';
+    }
+  }
+  return 'UNKNOWN';
+};
 
 /**
  * Adds a new stuff to the database.
@@ -98,27 +117,64 @@ export async function addReview(review: {
  * @param credentials, an object with the following properties: email, password.
  */
 export async function createUser(credentials: { email: string; password: string }) {
-  // console.log(`createUser data: ${JSON.stringify(credentials, null, 2)}`);
-  const password = await hash(credentials.password, 10);
-  await prisma.user.create({
-    data: {
-      email: credentials.email,
-      password,
-    },
-  });
+  try {
+    const password = await hash(credentials.password, 10);
+    await prisma.user.create({
+      data: {
+        email: credentials.email,
+        password,
+      },
+    });
+  } catch (error) {
+    throw new Error(mapPrismaAuthError(error));
+  }
 }
 
 /**
  * Changes the password of an existing user in the database.
  * @param credentials, an object with the following properties: email, password.
  */
-export async function changePassword(credentials: { email: string; password: string }) {
-  // console.log(`changePassword data: ${JSON.stringify(credentials, null, 2)}`);
-  const password = await hash(credentials.password, 10);
-  await prisma.user.update({
-    where: { email: credentials.email },
-    data: {
-      password,
-    },
-  });
+export async function changePassword(credentials: { email: string; password: string; oldpassword?: string }) {
+  try {
+    if (!credentials.oldpassword) {
+      throw new Error('MISSING_CURRENT_PASSWORD');
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { email: credentials.email },
+      select: { password: true },
+    });
+
+    if (!user) {
+      throw new Error('USER_NOT_FOUND');
+    }
+
+    const currentPasswordMatches = await compare(credentials.oldpassword, user.password);
+    if (!currentPasswordMatches) {
+      throw new Error('CURRENT_PASSWORD_INCORRECT');
+    }
+
+    const newMatchesOld = await compare(credentials.password, user.password);
+    if (newMatchesOld) {
+      throw new Error('NEW_PASSWORD_SAME_AS_OLD');
+    }
+
+    const password = await hash(credentials.password, 10);
+    await prisma.user.update({
+      where: { email: credentials.email },
+      data: {
+        password,
+      },
+    });
+  } catch (error) {
+    if (error instanceof Error && [
+      'MISSING_CURRENT_PASSWORD',
+      'USER_NOT_FOUND',
+      'CURRENT_PASSWORD_INCORRECT',
+      'NEW_PASSWORD_SAME_AS_OLD',
+    ].includes(error.message)) {
+      throw error;
+    }
+    throw new Error(mapPrismaAuthError(error));
+  }
 }

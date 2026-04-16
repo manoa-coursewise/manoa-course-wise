@@ -8,6 +8,7 @@ import * as Yup from 'yup';
 import { useRouter } from 'next/navigation';
 import { createUser } from '@/lib/dbActions';
 import '../auth.css';
+import { getAuthErrorMessage } from '@/lib/authErrorMessages';
 
 type SignUpForm = {
   email: string;
@@ -57,14 +58,18 @@ const SignUp = () => {
       });
 
       if (result?.error) {
-        setError('Account created but sign in failed. Please try signing in manually.');
+        setError(`Account created, but sign in failed: ${getAuthErrorMessage(result.error)}`);
         setIsLoading(false);
       } else if (result?.ok) {
         // Redirect to add page
         router.push('/add');
+      } else {
+        setError(getAuthErrorMessage('UNKNOWN'));
+        setIsLoading(false);
       }
-    } catch (err) {
-      setError('An error occurred during sign up. Please try again.');
+    } catch (err: unknown) {
+      const errorCode = err instanceof Error ? err.message : 'UNKNOWN';
+      setError(getAuthErrorMessage(errorCode));
       setIsLoading(false);
     }
   };
