@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Container, Row, Col, Card, Button, ListGroup } from 'react-bootstrap';
 import './dashboard.css';
 
@@ -21,8 +22,18 @@ interface UserDashboardProps {
 }
 
 const UserDashboard: React.FC<UserDashboardProps> = ({ user }) => {
+  const router = useRouter();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [savedCourses, setSavedCourses] = useState<string[]>([]);
+
+  const schedule = [
+    { id: 1, course: 'ICS 311', day: 'Mon/Wed', time: '10:00 AM - 11:15 AM' },
+    { id: 2, course: 'MATH 242', day: 'Tue/Thu', time: '1:00 PM - 2:15 PM' },
+  ];
+
+  const handleViewCourses = () => {
+    router.push('/list');
+  };
 
   useEffect(() => {
     async function fetchUserData() {
@@ -69,6 +80,17 @@ const UserDashboard: React.FC<UserDashboardProps> = ({ user }) => {
                 )}
               </ListGroup>
             </Card>
+
+            <Card>
+              <Card.Header>Your Stats</Card.Header>
+              <Card.Body>
+                <p><strong>Reviews Submitted:</strong> {reviews.length}</p>
+                <p><strong>Average Rating Given:</strong> {averageRating}</p>
+                <Button variant="outline-danger" onClick={() => alert('Logging out...')}>
+                  Log Out
+                </Button>
+              </Card.Body>
+            </Card>
           </Col>
 
           <Col md={6}>
@@ -85,13 +107,25 @@ const UserDashboard: React.FC<UserDashboardProps> = ({ user }) => {
               </ListGroup>
             </Card>
 
-            <Card>
-              <Card.Header>Your Stats</Card.Header>
+            <Card className="mb-4">
+              <Card.Header>Your Schedule</Card.Header>
+              <ListGroup variant="flush">
+                {schedule.length === 0 ? (
+                  <ListGroup.Item>No upcoming classes scheduled.</ListGroup.Item>
+                ) : (
+                  schedule.map(({ id, course, day, time }) => (
+                    <ListGroup.Item key={id}>
+                      <strong>{course}</strong>
+                      <p className="mb-0" style={{ color: '#6c757d' }}>
+                        {day} • {time}
+                      </p>
+                    </ListGroup.Item>
+                  ))
+                )}
+              </ListGroup>
               <Card.Body>
-                <p><strong>Reviews Submitted:</strong> {reviews.length}</p>
-                <p><strong>Average Rating Given:</strong> {averageRating}</p>
-                <Button variant="outline-danger" onClick={() => alert('Logging out...')}>
-                  Log Out
+                <Button variant="outline-primary" onClick={handleViewCourses}>
+                  View Courses
                 </Button>
               </Card.Body>
             </Card>
