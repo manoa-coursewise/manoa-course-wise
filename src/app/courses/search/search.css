@@ -19,3 +19,7 @@ h2 {
 .btn-success:hover {
   background-color: #17664c;
 }
+  
+a {
+  text-decoration: none;
+}

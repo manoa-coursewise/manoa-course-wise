@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from "react";
+import { Button } from "react-bootstrap";
 import Filters from "@/components/Filters";
 import CourseCard from "@/components/CourseCard";
 import './search.css';
@@ -100,7 +101,9 @@ export default function App() {
             <div className="row">
               {sortedCourses.map((course, idx) => (
                 <div className="col-md-6 mb-4" key={idx}>
-                  <CourseCard course={course} />
+                  <a href={`/courses/details/${course.code}/${course.professor}`}>
+                    <CourseCard course={course} />
+                  </a>
                 </div>
               ))}
             </div>

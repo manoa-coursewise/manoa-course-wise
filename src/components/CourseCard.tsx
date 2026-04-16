@@ -1,5 +1,5 @@
 const CourseCard = ({ course }) => {
-  return (
+ return (
     <div className="card shadow-sm p-3 h-100">
       <div className="d-flex justify-content-between">
         <div>
