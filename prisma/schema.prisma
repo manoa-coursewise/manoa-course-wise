@@ -38,3 +38,15 @@ model Stuff {
   condition Condition @default(good)
   owner     String
 }
+
+model Review {
+  id          Int      @id @default(autoincrement())
+  courseCode  String
+  professor   String
+  rating      Int
+  text        String
+  anonymous   Boolean  @default(false)
+  authorEmail String?
+  tags        String[]  @default([])
+  createdAt   DateTime @default(now())
+}
