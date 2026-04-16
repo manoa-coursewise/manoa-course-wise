@@ -1,11 +1,10 @@
-﻿'use client';
+
+'use client';
 
 import { useState, FormEvent } from 'react';
-import { useRouter } from 'next/navigation';
 import { Container, Card, Form, Button, Alert, Badge } from 'react-bootstrap';
 
-const AccountDetailsPage = () => {
-  const router = useRouter();
+const AccountDetailsMock = () => {
   const [name, setName] = useState('Jane Doe');
   const [email, setEmail] = useState('jane.doe@example.com');
   const [message, setMessage] = useState<string | null>(null);
@@ -23,18 +22,19 @@ const AccountDetailsPage = () => {
     setMessage(null);
     setIsSaving(true);
 
+    // Simulate saving delay
     setTimeout(() => {
       setIsSaving(false);
-      setMessage('Account details updated successfully.');
+      setMessage('Account details updated successfully!');
     }, 1000);
   };
 
-  const handleChangePassword = () => {
-    router.push('/auth/change-password');
+  const handleSignOut = () => {
+    alert('Sign out clicked (mock)');
   };
 
-  const handleSignOut = () => {
-    router.push('/auth/signout');
+  const handleChangePassword = () => {
+    alert('Change password clicked (mock)');
   };
 
   return (
@@ -42,7 +42,7 @@ const AccountDetailsPage = () => {
       <Container style={{ maxWidth: '520px' }}>
         <Card className="mb-4">
           <Card.Header>
-            <h2>Account Details</h2>
+            <h2>Account Details (Mockup)</h2>
           </Card.Header>
           <Card.Body>
             <p>
@@ -120,4 +120,4 @@ const AccountDetailsPage = () => {
   );
 };
 
-export default AccountDetailsPage;
+export default AccountDetailsMock;
