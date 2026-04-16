@@ -62,7 +62,7 @@ const SignUp = () => {
         setIsLoading(false);
       } else if (result?.ok) {
         // Redirect to add page
-        router.push('/add');
+        router.push('/dashboard');
       } else {
         setError(getAuthErrorMessage('UNKNOWN'));
         setIsLoading(false);
