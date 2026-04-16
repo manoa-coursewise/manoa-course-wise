@@ -19,7 +19,6 @@ const SignIn = () => {
     const savedEmail = localStorage.getItem('rememberedEmail');
     if (savedEmail && emailRef.current) {
       emailRef.current.value = savedEmail;
-      setRememberMe(true);
     }
   }, []);
 
