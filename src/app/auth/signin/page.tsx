@@ -4,6 +4,7 @@ import { signIn } from 'next-auth/react'; // v5 compatible
 import { useRouter } from 'next/navigation';
 import { useState, FormEvent, useRef, useEffect } from 'react';
 import '../auth.css';
+import { getAuthErrorMessage } from '@/lib/authErrorMessages';
 
 /** The sign in page. */
 const SignIn = () => {
@@ -44,18 +45,26 @@ const SignIn = () => {
       localStorage.removeItem('rememberedEmail');
     }
 
-    const result = await signIn('credentials', {
-      email,
-      password,
-      redirect: false,
-    });
+    try {
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+      });
 
-    if (result?.error) {
-      setError('Invalid email or password. Please try again.');
+      if (result?.error) {
+        setError(getAuthErrorMessage(result.error));
+        setIsLoading(false);
+      } else if (result?.ok) {
+        // Success - redirect to list page
+        router.push('/list');
+      } else {
+        setError(getAuthErrorMessage('UNKNOWN'));
+        setIsLoading(false);
+      }
+    } catch {
+      setError(getAuthErrorMessage('NETWORK_ERROR'));
       setIsLoading(false);
-    } else if (result?.ok) {
-      // Success - redirect to list page
-      router.push('/list');
     }
   };
 

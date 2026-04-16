@@ -9,6 +9,7 @@ import swal from 'sweetalert';
 import { changePassword } from '@/lib/dbActions';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import '../auth.css';
+import { getAuthErrorMessage } from '@/lib/authErrorMessages';
 
 type ChangePasswordForm = {
   oldpassword: string;
@@ -53,8 +54,9 @@ const ChangePassword = () => {
         { timer: 2000 }
       );
       reset();
-    } catch (error) {
-      await swal('Error', 'Failed to change password', 'error');
+    } catch (error: unknown) {
+      const errorCode = error instanceof Error ? error.message : 'UNKNOWN';
+      await swal('Error', getAuthErrorMessage(errorCode), 'error');
     } finally {
       setIsLoading(false);
     }
