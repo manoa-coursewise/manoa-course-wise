@@ -1,6 +1,6 @@
 'use client';
 
-import { Col, Container, Image, Row, Button, Form } from 'react-bootstrap';
+import { Col, Container, Row, Button, Form } from 'react-bootstrap';
 import { Search } from 'react-bootstrap-icons';
 import './landing.css';
 

@@ -30,7 +30,7 @@ const NavBar: React.FC = () => {
             <Nav.Link href="#schedule-builder" className="mx-2">
               Schedule Builder
             </Nav.Link>
-            <Nav.Link href="#submit-review" className="mx-2">
+            <Nav.Link href="/reviews/submit" className="mx-2">
               Submit Review
             </Nav.Link>
             {currentUser && role === 'ADMIN' && (

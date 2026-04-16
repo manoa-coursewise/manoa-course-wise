@@ -65,6 +65,35 @@ export async function deleteStuff(id: number) {
 }
 
 /**
+ * Adds a new review to the database.
+ */
+export async function addReview(review: {
+  courseCode: string;
+  professor: string;
+  rating: number;
+  text: string;
+  anonymous: boolean;
+  authorEmail?: string | null;
+  tags?: string[];
+  semesterTaken?: string | null;
+}) {
+  await prisma.review.create({
+    data: {
+      courseCode: review.courseCode,
+      professor: review.professor,
+      rating: review.rating,
+      text: review.text,
+      anonymous: review.anonymous,
+      authorEmail: review.anonymous ? null : review.authorEmail ?? null,
+      tags: review.tags ?? [],
+      semesterTaken: review.semesterTaken ?? null,
+    },
+  });
+  // After adding, redirect to the list page (change as needed)
+  redirect('/list');
+}
+
+/**
  * Creates a new user in the database.
  * @param credentials, an object with the following properties: email, password.
  */

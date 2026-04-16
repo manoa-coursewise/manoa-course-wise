@@ -12,3 +12,12 @@ body {
   display: flex;
   flex-direction: column;
 }
+
+/* Accent the post anonymously switch to match landing colors */
+#post-anon-switch:checked {
+  background-color: #20a084 !important;
+  border-color: #20a084 !important;
+}
+#post-anon-switch:focus {
+  box-shadow: 0 0 0 0.2rem rgba(32,160,132,0.25);
+}

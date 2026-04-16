@@ -1,11 +1,18 @@
 import { redirect } from 'next/navigation';
 import { Role } from '@prisma/client';
 
+type PageSession = {
+  user?: {
+    email?: string | null;
+    role?: string;
+  };
+} | null;
+
 /**
  * Redirects to the login page if the user is not logged in.
  */
-export const loggedInProtectedPage = (session: { user: { email: string; id: string; name: string } } | null) => {
-  if (!session) {
+export const loggedInProtectedPage = (session: PageSession) => {
+  if (!session?.user?.email) {
     redirect('/auth/signin');
   }
 };
@@ -14,9 +21,9 @@ export const loggedInProtectedPage = (session: { user: { email: string; id: stri
  * Redirects to the login page if the user is not logged in.
  * Redirects to the not-authorized page if the user is not an admin.
  */
-export const adminProtectedPage = (session: { user: { email: string; id: string; name: string; role?: string } } | null) => {
+export const adminProtectedPage = (session: PageSession) => {
   loggedInProtectedPage(session);
-  if (session && session.user.role !== Role.ADMIN) {
+  if (session?.user?.role !== Role.ADMIN) {
     redirect('/not-authorized');
   }
 };
