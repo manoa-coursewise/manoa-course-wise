@@ -1,4 +1,20 @@
-const CourseCard = ({ course }) => {
+interface Course {
+  code: string;
+  title: string;
+  professor: string;
+  rating: number;
+  reviews: number;
+  difficulty: string;
+  workload: string;
+  clarity: string;
+  tags: string[];
+}
+
+interface CourseCardProps {
+  course: Course;
+}
+
+const CourseCard = ({ course }: CourseCardProps) => {
  return (
     <div className="card shadow-sm p-3 h-100">
       <div className="d-flex justify-content-between">
