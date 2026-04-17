@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from "react";
-import { Button } from "react-bootstrap";
 import Filters from "@/components/Filters";
 import CourseCard from "@/components/CourseCard";
 import './search.css';
@@ -68,7 +67,7 @@ export default function App() {
   });
 
   return (
-    <div>
+    <div className="course-search-page">
 
       <div className="container mt-4">
         <div className="row">

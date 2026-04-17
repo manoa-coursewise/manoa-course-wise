@@ -1,25 +1,27 @@
-body {
+.course-search-page {
   background-color: #f6f7f9;
   background: linear-gradient(135deg, #1a5f5f 0%, #2a7f7f 50%, #1a5f5f 100%);
+  min-height: 100vh;
+  padding-bottom: 2rem;
 }
 
-h2 {
+.course-search-page h2 {
     color: white;
 }
 
-.card {
+.course-search-page .card {
   border-radius: 12px;
 }
 
-.btn-success {
+.course-search-page .btn-success {
   background-color: #1f7a5c;
   border: none;
 }
 
-.btn-success:hover {
+.course-search-page .btn-success:hover {
   background-color: #17664c;
 }
   
-a {
+.course-search-page a {
   text-decoration: none;
 }

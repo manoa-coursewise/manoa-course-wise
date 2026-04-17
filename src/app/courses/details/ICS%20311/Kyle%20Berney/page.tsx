@@ -41,7 +41,7 @@ const reviews = [
 
 const CourseDetail = () => {
   return (
-    <div>
+    <div className="course-details-page">
 
       <div className="container mt-4">
         {/* Top Card */}
