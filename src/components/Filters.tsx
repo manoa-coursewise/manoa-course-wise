@@ -1,13 +1,14 @@
-
-
 const Filters = ({
   selectedDepartments,
   setSelectedDepartments,
+}: {
+  selectedDepartments: string[];
+  setSelectedDepartments: (departments: string[]) => void;
 }) => {
 
   const departments = ["ICS", "MATH", "BIOL", "ECON"];
   
-  const handleChange = (dept) => {
+  const handleChange = (dept: string) => {
     if (selectedDepartments.includes(dept)) {
       setSelectedDepartments(
         selectedDepartments.filter((d) => d !== dept)
