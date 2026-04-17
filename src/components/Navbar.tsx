@@ -42,13 +42,18 @@ const NavBar: React.FC = () => {
           <Nav className="ms-auto">
             {session ? (
               <NavDropdown id="login-dropdown" title={currentUser} align="end">
-                <NavDropdown.Item id="login-dropdown-sign-out" href="/api/auth/signout">
-                  <BoxArrowRight />
-                  Sign Out
+                <NavDropdown.Item id="login-dropdown-account-details" href="/account-details">
+                  <Lock />
+                  Account Details
                 </NavDropdown.Item>
                 <NavDropdown.Item id="login-dropdown-change-password" href="/auth/change-password">
                   <Lock />
                   Change Password
+                </NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item id="login-dropdown-sign-out" href="/api/auth/signout">
+                  <BoxArrowRight />
+                  Sign Out
                 </NavDropdown.Item>
               </NavDropdown>
             ) : (

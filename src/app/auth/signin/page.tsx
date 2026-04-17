@@ -57,7 +57,7 @@ const SignIn = () => {
         setIsLoading(false);
       } else if (result?.ok) {
         // Success - redirect to list page
-        router.push('/list');
+        router.push('/dashboard');
       } else {
         setError(getAuthErrorMessage('UNKNOWN'));
         setIsLoading(false);
