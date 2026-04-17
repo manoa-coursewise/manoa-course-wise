@@ -1,22 +1,24 @@
-body {
+.course-details-page {
   background-color: #f5f7f9;
   background: linear-gradient(135deg, #1a5f5f 0%, #2a7f7f 50%, #1a5f5f 100%);
+  min-height: 100vh;
+  padding-bottom: 2rem;
 }
 
-.card {
+.course-details-page .card {
   border-radius: 14px;
 }
 
-.badge {
+.course-details-page .badge {
   border-radius: 20px;
   font-weight: 500;
 }
 
-.btn-success {
+.course-details-page .btn-success {
   background-color: #1f7a5c;
   border: 1px;
 }
 
-.btn-success:hover {
+.course-details-page .btn-success:hover {
   background-color: #17664c;
 }

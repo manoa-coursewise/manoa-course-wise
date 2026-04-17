@@ -13,28 +13,28 @@ const NavBar: React.FC = () => {
   const role = session?.user?.role;
   
   return (
-    <Navbar bg="light" expand="lg" sticky="top" className="shadow-sm">
+    <Navbar expand="lg" sticky="top" className="app-navbar shadow-sm">
       <Container>
-        <Navbar.Brand href="/" className="fw-bold" style={{ fontSize: '1.5rem' }}>
+        <Navbar.Brand href="/" className="fw-bold app-navbar-brand" style={{ fontSize: '1.5rem' }}>
           Mānoa CourseWise
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
-            <Nav.Link href="/courses/search" className="mx-2">
+            <Nav.Link href="/courses/search" className="mx-2 app-nav-link">
               Search Courses
             </Nav.Link>
-            <Nav.Link href="#professors" className="mx-2">
+            <Nav.Link href="#professors" className="mx-2 app-nav-link">
               Professors
             </Nav.Link>
-            <Nav.Link href="#schedule-builder" className="mx-2">
+            <Nav.Link href="#schedule-builder" className="mx-2 app-nav-link">
               Schedule Builder
             </Nav.Link>
-            <Nav.Link href="/reviews/submit" className="mx-2">
+            <Nav.Link href="/reviews/submit" className="mx-2 app-nav-link">
               Submit Review
             </Nav.Link>
             {currentUser && role === 'ADMIN' && (
-              <Nav.Link id="admin-stuff-nav" href="/admin" active={pathName === '/admin'} className="mx-2">
+              <Nav.Link id="admin-stuff-nav" href="/admin" active={pathName === '/admin'} className="mx-2 app-nav-link">
                 Admin
               </Nav.Link>
             )}
@@ -57,7 +57,7 @@ const NavBar: React.FC = () => {
                 </NavDropdown.Item>
               </NavDropdown>
             ) : (
-              <Nav.Link id="login-btn" href="/auth/signin" className="btn btn-outline-primary mx-2">
+              <Nav.Link id="login-btn" href="/auth/signin" className="btn btn-outline-primary mx-2 app-login-link">
                 Log In
               </Nav.Link>
             )}

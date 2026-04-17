@@ -3,7 +3,6 @@
   background: #f8f9fa;
   min-height: 100vh;
   color: #1a5f5f;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* Welcome Header */
@@ -17,20 +16,20 @@
 }
 
 /* Cards */
-.card {
+.dashboard-main .card {
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(26, 95, 95, 0.15);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   background: white;
 }
 
-.card:hover {
+.dashboard-main .card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 25px rgba(26, 95, 95, 0.25);
 }
 
 /* Card Header */
-.card-header {
+.dashboard-main .card-header {
   background-color: #1a5f5f;
   color: white;
   font-weight: 600;
@@ -42,7 +41,7 @@
 }
 
 /* List Group Items */
-.list-group-item {
+.dashboard-main .list-group-item {
   font-size: 1rem;
   color: #333;
   border: none;
@@ -50,23 +49,23 @@
   border-bottom: 1px solid #e9ecef;
 }
 
-.list-group-item:last-child {
+.dashboard-main .list-group-item:last-child {
   border-bottom: none;
 }
 
-.list-group-item strong {
+.dashboard-main .list-group-item strong {
   color: #20a084;
 }
 
 /* Review Comment Paragraph */
-.list-group-item p {
+.dashboard-main .list-group-item p {
   margin: 5px 0 0 0;
   font-style: italic;
   color: #666;
 }
 
 /* Stats Card Body */
-.card-body p {
+.dashboard-main .card-body p {
   font-size: 1rem;
   margin-bottom: 12px;
   color: #1a5f5f;
@@ -74,7 +73,7 @@
 }
 
 /* Log Out Button */
-button {
+.dashboard-main button {
   background-color: #20a084;
   border: none;
   color: white;
@@ -86,8 +85,8 @@ button {
   transition: background-color 0.3s ease;
 }
 
-button:hover,
-button:focus {
+.dashboard-main button:hover,
+.dashboard-main button:focus {
   background-color: #1a8a6b;
   outline: none;
   box-shadow: 0 0 8px rgba(26, 95, 95, 0.5);
@@ -104,21 +103,21 @@ button:focus {
     margin-bottom: 30px;
   }
 
-  .card-header {
+  .dashboard-main .card-header {
     font-size: 1.1rem;
     padding: 12px 15px;
   }
 
-  .list-group-item {
+  .dashboard-main .list-group-item {
     font-size: 0.95rem;
     padding: 12px 15px;
   }
 
-  .card-body p {
+  .dashboard-main .card-body p {
     font-size: 0.95rem;
   }
 
-  button {
+  .dashboard-main button {
     padding: 10px 20px;
   }
 }
@@ -128,7 +127,7 @@ button:focus {
     font-size: 1.5rem;
   }
 
-  button {
+  .dashboard-main button {
     padding: 10px 15px;
   }
 }
