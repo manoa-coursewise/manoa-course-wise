@@ -1,12 +1,13 @@
 interface Course {
   code: string;
+  department: string;
   title: string;
   professor: string;
   rating: number;
   reviews: number;
-  difficulty: string;
-  workload: string;
-  clarity: string;
+  difficulty: number;  // Change from string to number
+  workload: number;
+  clarity: number;
   tags: string[];
 }
 
