@@ -33,6 +33,9 @@ const NavBar: React.FC = () => {
             <Nav.Link href="/reviews/submit" className="mx-2 app-nav-link">
               Submit Review
             </Nav.Link>
+            <Nav.Link href = "/dashboard" className="mx-2 app-nav-link">
+            My Dashboard
+            </Nav.Link>
             {currentUser && role === 'ADMIN' && (
               <Nav.Link id="admin-stuff-nav" href="/admin" active={pathName === '/admin'} className="mx-2 app-nav-link">
                 Admin
