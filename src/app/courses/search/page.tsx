@@ -70,7 +70,7 @@ export default async function App() {
   });
 
   return (
-    <div>
+    <div className="course-search-page">
 
       <div className="container mt-4">
         <div className="row">
