@@ -1,45 +1,60 @@
 import '../../details.css';
 import { Button } from 'react-bootstrap';
+import { prisma } from '@/lib/prisma';
+import { notFound } from 'next/navigation';
 
-const course = {
-  code: "ICS 311",
-  title: "Algorithms",
-  professor: "Kyle Berney",
-  rating: 4.7,
-  reviews: 218,
-  difficulty: 4.1,
-  workload: 3.9,
-  clarity: 4.8,
-  wouldTakeAgain: 94,
-  tags: [
-    "Heavy Reading",
-    "Strong Lectures",
-    "Tough Exams",
-    "Proof Heavy",
-    "Clear Explanations",
-  ],
-};
+const toFixed = (value: number) => Number(value.toFixed(1));
 
-const reviews = [
-  {
-    term: "Spring 2025",
-    rating: 5.0,
-    text: `"Best class I've taken at Manoa. Kyle explains complex topics very clearly. Exams are tough but fair and directly based on lectures. Highly recommended."`,
-    difficulty: 4,
-    workload: 4,
-    clarity: 5,
-  },
-  {
-    term: "Fall 2024",
-    rating: 4.5,
-    text: `"Challenging but rewarding. Lots of reading."`,
-    difficulty: 4,
-    workload: 4,
-    clarity: 4,
-  },
-];
+const CourseDetail = async () => {
+  const course = await prisma.course.findUnique({
+    where: { classId: 'ICS 311' },
+    include: {
+      professors: {
+        orderBy: { name: 'asc' },
+      },
+      reviews: {
+        include: {
+          professor: true,
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      },
+    },
+  });
 
-const CourseDetail = () => {
+  if (!course) {
+    notFound();
+  }
+
+  const reviewCount = course.reviews.length;
+  const total = course.reviews.reduce(
+    (acc, review) => {
+      acc.rating += review.rating;
+      acc.difficulty += review.difficulty;
+      acc.workload += review.workload;
+      acc.clarity += review.clarity;
+      return acc;
+    },
+    { rating: 0, difficulty: 0, workload: 0, clarity: 0 },
+  );
+
+  const avgRating = reviewCount ? toFixed(total.rating / reviewCount) : 0;
+  const avgDifficulty = reviewCount ? toFixed(total.difficulty / reviewCount) : 0;
+  const avgWorkload = reviewCount ? toFixed(total.workload / reviewCount) : 0;
+  const avgClarity = reviewCount ? toFixed(total.clarity / reviewCount) : 0;
+
+  const tagCounts = new Map<string, number>();
+  course.reviews.forEach((review) => {
+    review.tags.forEach((tag) => {
+      tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
+    });
+  });
+  const topTags = [...tagCounts.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 8)
+    .map(([tag]) => tag);
+
   return (
     <div>
 
@@ -48,33 +63,29 @@ const CourseDetail = () => {
         <div className="card p-4 shadow-sm mb-4">
           <div className="d-flex justify-content-between">
             <div>
-              <h3 className="text-success fw-bold">{course.code}</h3>
-              <h1 className="fw-bold">{course.title}</h1>
-              <p className="text-muted">{course.professor}</p>
+              <h3 className="text-success fw-bold">{course.classId}</h3>
+              <h1 className="fw-bold">{course.name}</h1>
+              <p className="text-muted">{course.professors.map((p) => p.name).join(', ') || 'TBA'}</p>
             </div>
 
             <div className="text-end">
-              <h1 className="text-success">{course.rating}</h1>
-              <p className="text-muted">{course.reviews} reviews</p>
+              <h1 className="text-success">{avgRating || '--'}</h1>
+              <p className="text-muted">{reviewCount} reviews</p>
             </div>
           </div>
 
           <div className="row mt-4 text-center">
             <div className="col">
               <small>Difficulty</small>
-              <h4>{course.difficulty}</h4>
+              <h4>{avgDifficulty || '--'}</h4>
             </div>
             <div className="col">
               <small>Workload</small>
-              <h4>{course.workload}</h4>
+              <h4>{avgWorkload || '--'}</h4>
             </div>
             <div className="col">
               <small>Clarity</small>
-              <h4 className="text-success">{course.clarity}</h4>
-            </div>
-            <div className="col">
-              <small>Would Take Again</small>
-              <h4 className="text-success">{course.wouldTakeAgain}%</h4>
+              <h4 className="text-success">{avgClarity || '--'}</h4>
             </div>
           </div>
         </div>
@@ -83,8 +94,9 @@ const CourseDetail = () => {
         <div className="mb-4">
           <h5>Common Student Feedback</h5>
           <div className="mt-2">
-            {course.tags.map((tag, idx) => (
-              <span key={idx} className="badge bg-light text-dark me-2 mb-2 p-2">
+            {topTags.length === 0 && <p className="text-muted mb-0">No tags yet.</p>}
+            {topTags.map((tag, idx) => (
+              <span key={`${tag}-${idx}`} className="badge bg-light text-dark me-2 mb-2 p-2">
                 {tag}
               </span>
             ))}
@@ -100,11 +112,17 @@ const CourseDetail = () => {
               <Button className="btn btn-success border" href="/reviews/submit">Write a Review</Button>
             </div>
 
-            {reviews.map((review, idx) => (
-              <div key={idx} className="card p-3 mb-3 shadow-sm">
+            {course.reviews.length === 0 && (
+              <div className="card p-3 mb-3 shadow-sm">
+                <p className="mb-0 text-muted">No reviews yet. Be the first to submit one.</p>
+              </div>
+            )}
+
+            {course.reviews.map((review) => (
+              <div key={review.id} className="card p-3 mb-3 shadow-sm">
                 <div className="d-flex justify-content-between">
                   <strong>
-                    {review.term} • Anonymous
+                    {(review.semesterTaken ?? 'Semester N/A')} • {review.professor?.name ?? 'Professor N/A'} • {review.anonymous ? 'Anonymous' : (review.authorEmail ?? 'User')}
                   </strong>
                   <span className="text-success">{review.rating}</span>
                 </div>
@@ -115,6 +133,16 @@ const CourseDetail = () => {
                   Difficulty: {review.difficulty} | Workload:{" "}
                   {review.workload} | Clarity: {review.clarity}
                 </small>
+
+                {review.tags.length > 0 && (
+                  <div className="mt-2">
+                    {review.tags.map((tag) => (
+                      <span key={`${review.id}-${tag}`} className="badge bg-light text-dark me-2 mb-1 p-2">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
             ))}
           </div>

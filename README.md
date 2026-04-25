@@ -42,3 +42,50 @@ For details, please see http://ics-software-engineering.github.io/nextjs-applica
 The app will be available at [http://localhost:3000](http://localhost:3000).
 
 See the [template documentation](http://ics-software-engineering.github.io/nextjs-application-template/) for more details and walkthroughs.
+
+## Course and Review Database Setup
+
+This project now models:
+
+1. `Course`: class id (`classId`), class name (`name`), professors, and reviews.
+2. `Professor`: each professor tied to a specific course.
+3. `Review`: tied to a course and (optionally) to both professor and user.
+4. `User`: can own many reviews.
+
+### Local migration + seed
+
+1. Ensure `DATABASE_URL` is set in `.env`.
+2. Create and apply migration:
+	```bash
+	npx prisma migrate dev --name add-course-professor-review-relations
+	```
+3. Regenerate client:
+	```bash
+	npx prisma generate
+	```
+4. Seed users, classes, and professors:
+	```bash
+	npm run seed
+	```
+
+## Deployable To Vercel
+
+1. Create a managed Postgres database (recommended: Vercel Postgres, Neon, Supabase, or Railway).
+2. In Vercel Project Settings -> Environment Variables, set:
+	- `DATABASE_URL`
+	- `AUTH_SECRET`
+	- `NEXTAUTH_SECRET`
+3. In Vercel Build & Development Settings, set Build Command to:
+	```bash
+	npm run vercel-build
+	```
+	This runs:
+	- `prisma generate`
+	- `prisma migrate deploy`
+	- `next build`
+4. Deploy from your main branch.
+
+### Notes
+
+- `prisma migrate deploy` is safe for CI/CD and production deploys.
+- Use `npx prisma studio` locally to verify Course/Professor/Review relations.

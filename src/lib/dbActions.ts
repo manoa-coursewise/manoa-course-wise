@@ -88,19 +88,60 @@ export async function deleteStuff(id: number) {
  */
 export async function addReview(review: {
   courseCode: string;
+  courseName: string;
   professor: string;
-  rating: number;
+  difficulty: number;
+  workload: number;
+  clarity: number;
   text: string;
   anonymous: boolean;
   authorEmail?: string | null;
   tags?: string[];
   semesterTaken?: string | null;
 }) {
+  const rating = Number(((review.difficulty + review.workload + review.clarity) / 3).toFixed(2));
+
+  const course = await prisma.course.upsert({
+    where: { classId: review.courseCode },
+    update: {
+      name: review.courseName,
+    },
+    create: {
+      classId: review.courseCode,
+      name: review.courseName,
+    },
+  });
+
+  const professor = await prisma.professor.upsert({
+    where: {
+      courseId_name: {
+        courseId: course.id,
+        name: review.professor,
+      },
+    },
+    update: {},
+    create: {
+      name: review.professor,
+      courseId: course.id,
+    },
+  });
+
+  const user = review.authorEmail
+    ? await prisma.user.findUnique({
+      where: { email: review.authorEmail },
+      select: { id: true },
+    })
+    : null;
+
   await prisma.review.create({
     data: {
-      courseCode: review.courseCode,
-      professor: review.professor,
-      rating: review.rating,
+      courseId: course.id,
+      professorId: professor.id,
+      userId: user?.id ?? null,
+      rating,
+      difficulty: review.difficulty,
+      workload: review.workload,
+      clarity: review.clarity,
       text: review.text,
       anonymous: review.anonymous,
       authorEmail: review.anonymous ? null : review.authorEmail ?? null,
@@ -108,8 +149,7 @@ export async function addReview(review: {
       semesterTaken: review.semesterTaken ?? null,
     },
   });
-  // After adding, redirect to the list page (change as needed)
-  redirect('/list');
+  redirect(`/courses/details/${encodeURIComponent(review.courseCode)}/${encodeURIComponent(review.professor)}`);
 }
 
 /**
