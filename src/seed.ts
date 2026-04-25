@@ -36,7 +36,7 @@ async function main() {
     });
   }
 
-  for (const course of courseData) {
+  for (const course of courseData.filter((entry) => entry.code.startsWith('ICS '))) {
     const createdCourse = await prisma.course.upsert({
       where: { classId: course.code },
       update: {
@@ -48,7 +48,7 @@ async function main() {
       },
     });
 
-    for (const professor of course.professors) {
+    for (const professor of [...new Set(course.professors.map((name) => name.trim()).filter(Boolean))]) {
       await prisma.professor.upsert({
         where: {
           courseId_name: {

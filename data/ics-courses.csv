@@ -1,0 +1,45 @@
+course number,course name,instructor
+101,Digital Tools for the Information World,Michael-Brian C. Ogawa
+110P,Introduction to Programming: Python,Peter-Michael Seidel
+111,Introduction to Computer Science I,Carleton A. Moore
+141,Discrete Mathematics for Computer Science I,Andrey A. Popov
+211,Introduction to Computer Science II,Edoardo Biagioni
+212,Program Structure,Ravi Narayan
+241,Discrete Mathematics for Computer Science II,Andrey A. Popov
+311,Algorithms,Kyle M. Berney
+312,Machine-Level and Systems Programming,Henri Casanova
+313,Programming Language Theory,David B. Conner
+314,Software Engineering I,David B. Conner
+314,Software Engineering I,Italo De Oliveira Santos
+314,Software Engineering I,Carleton A. Moore
+321,Database Systems I,Yifan Wang
+332,Operating Systems,Henri Casanova
+355,Security and Trust I: Resource Protections,Peter-Michael Seidel
+361,Introduction to Artificial Intelligence Programming,Kimberly A. Binsted
+369,Computational Media Systems,Kaveh Kardan
+390,Computing Ethics for Lab Assistants,Martha E. Crosby
+414,Software Engineering II,Carleton A. Moore
+425,Computer Security and Ethics,David B. Conner
+429,Blockchain and Cryptocurrencies,Edoardo Biagioni
+434,Data Science Fundamentals,Kyungim Baek
+435,Machine Learning Fundamentals,Haopeng Zhang
+451,Data Networks,Ravi Narayan
+464,Human Computer Interaction I,Nurit Kirshenbaum
+469,Cognitive Science,Martha E. Crosby
+482,Topics in Computer Graphics,Kaveh Kardan
+485,Video Game Design and Development,Jason Leigh
+485,Video Game Design and Development,David B. Conner
+488,Digital Content Creation II,Kaveh Kardan
+491,Offensive Cybersecurity Tooling and Practicum,Mehdi Tarrit Mirakhorli
+496,Capstone Project,Guylaine Poisson
+496,Capstone Project,David B. Conner
+496,Capstone Project,Kaveh Kardan
+499,Computer Project,Peter J. Sadowski
+621,Analysis of Algorithms,Nodar S. Sitchinava
+624,Advanced Data Management,Yifan Wang
+643,Advanced Parallel Algorithms,Nodar S. Sitchinava
+661,Advanced Artificial Intelligence,Kimberly A. Binsted
+691B,Topics in Computer Science: Area 1,Katy Tarrit Mirakhorli
+691E,Topics in Computer Science: Area 4,Jason Leigh
+692,Special Topics Seminar,Peter J. Sadowski
+695,Advanced Special Topics in Security,Dusko Pavlovic
