@@ -17,8 +17,11 @@ export const EditStuffSchema = Yup.object({
 
 export const SubmitReviewSchema = Yup.object({
   courseCode: Yup.string().required(),
+  courseName: Yup.string().nullable(),
   professor: Yup.string().required(),
-  rating: Yup.number().min(1).max(5).required(),
+  difficulty: Yup.number().min(1).max(5).required(),
+  workload: Yup.number().min(1).max(5).required(),
+  clarity: Yup.number().min(1).max(5).required(),
   text: Yup.string().required(),
   anonymous: Yup.boolean().required(),
   authorEmail: Yup.string().email().nullable(),

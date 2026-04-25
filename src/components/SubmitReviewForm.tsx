@@ -42,58 +42,6 @@ const semesterOptions = [
   'Spring 2026',
 ];
 
-const StarRating: React.FC<{ value: number; onChange: (value: number) => void }> = ({ value, onChange }) => {
-  const handleClick = (index: number, half: boolean) => {
-    const newValue = index + (half ? 0.5 : 1);
-    onChange(newValue);
-  };
-
-  return (
-    <div style={{ display: 'flex', gap: '2px' }}>
-      {Array.from({ length: 5 }, (_, i) => {
-        const isFull = value >= i + 1;
-        const isHalf = value >= i + 0.5 && value < i + 1;
-        return (
-          <div key={i} style={{ position: 'relative', cursor: 'pointer' }}>
-            <span
-              style={{ fontSize: '24px', color: '#ddd' }}
-              onClick={() => handleClick(i, false)}
-            >
-              ★
-            </span>
-            <span
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '50%',
-                overflow: 'hidden',
-                fontSize: '24px',
-                color: '#ffc107',
-              }}
-              onClick={() => handleClick(i, true)}
-            >
-              {isHalf || isFull ? '★' : ''}
-            </span>
-            <span
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                fontSize: '24px',
-                color: isFull ? '#ffc107' : isHalf ? '#ffc107' : '#ddd',
-              }}
-              onClick={() => handleClick(i, false)}
-            >
-              ★
-            </span>
-          </div>
-        );
-      })}
-    </div>
-  );
-};
-
 const SubmitReviewForm: React.FC = () => {
   const { data: session, status } = useSession();
   const currentUser = session?.user?.email || '';
@@ -105,15 +53,23 @@ const SubmitReviewForm: React.FC = () => {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(SubmitReviewSchema),
-    defaultValues: { anonymous: false, authorEmail: currentUser },
+    defaultValues: {
+      anonymous: false,
+      authorEmail: currentUser,
+      difficulty: 3,
+      workload: 3,
+      clarity: 3,
+    },
   });
 
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [rating, setRating] = useState<number>(0);
 
   type ReviewFormData = {
     courseCode: string;
     professor: string;
+    difficulty: number;
+    workload: number;
+    clarity: number;
     text: string;
     anonymous: boolean;
     authorEmail?: string | null;
@@ -121,10 +77,14 @@ const SubmitReviewForm: React.FC = () => {
   };
 
   const onSubmit = async (data: ReviewFormData, selectedTags: string[]) => {
+    const selectedCourse = courseData.find((c) => c.code === data.courseCode);
     await addReview({
       courseCode: data.courseCode,
+      courseName: selectedCourse?.name ?? data.courseCode,
       professor: data.professor,
-      rating: rating,
+      difficulty: Number(data.difficulty),
+      workload: Number(data.workload),
+      clarity: Number(data.clarity),
       text: data.text,
       anonymous: Boolean(data.anonymous),
       authorEmail: data.anonymous ? null : data.authorEmail,
@@ -203,11 +163,41 @@ const SubmitReviewForm: React.FC = () => {
                   </select>
                 </Form.Group>
 
-                <Form.Group>
-                  <Form.Label>Rating</Form.Label>
-                  <StarRating value={rating} onChange={setRating} />
-                  <div className="invalid-feedback">{errors.rating?.message}</div>
-                </Form.Group>
+                <Row>
+                  <Col md={4}>
+                    <Form.Group>
+                      <Form.Label>Difficulty</Form.Label>
+                      <Form.Select {...register('difficulty')} className={errors.difficulty ? 'is-invalid' : ''}>
+                        {[1, 2, 3, 4, 5].map((value) => (
+                          <option key={`difficulty-${value}`} value={value}>{value}</option>
+                        ))}
+                      </Form.Select>
+                      <div className="invalid-feedback">{errors.difficulty?.message}</div>
+                    </Form.Group>
+                  </Col>
+                  <Col md={4}>
+                    <Form.Group>
+                      <Form.Label>Workload</Form.Label>
+                      <Form.Select {...register('workload')} className={errors.workload ? 'is-invalid' : ''}>
+                        {[1, 2, 3, 4, 5].map((value) => (
+                          <option key={`workload-${value}`} value={value}>{value}</option>
+                        ))}
+                      </Form.Select>
+                      <div className="invalid-feedback">{errors.workload?.message}</div>
+                    </Form.Group>
+                  </Col>
+                  <Col md={4}>
+                    <Form.Group>
+                      <Form.Label>Clarity</Form.Label>
+                      <Form.Select {...register('clarity')} className={errors.clarity ? 'is-invalid' : ''}>
+                        {[1, 2, 3, 4, 5].map((value) => (
+                          <option key={`clarity-${value}`} value={value}>{value}</option>
+                        ))}
+                      </Form.Select>
+                      <div className="invalid-feedback">{errors.clarity?.message}</div>
+                    </Form.Group>
+                  </Col>
+                </Row>
 
                 <Form.Group>
                   <Form.Label>Review</Form.Label>
@@ -259,7 +249,7 @@ const SubmitReviewForm: React.FC = () => {
                       <Button type="submit" variant="success" className={`${styles.submitButton} me-3`}>
                         Submit
                       </Button>
-                      <Button type="button" onClick={() => { reset(); setSelectedTags([]); setRating(0); }} variant="outline-secondary">
+                      <Button type="button" onClick={() => { reset(); setSelectedTags([]); }} variant="outline-secondary">
                         Reset
                       </Button>
                     </Col>

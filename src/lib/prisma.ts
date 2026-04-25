@@ -1,6 +1,10 @@
-import "dotenv/config";
+import { config as loadEnv } from "dotenv";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@prisma/client";
+
+// Match Prisma CLI env precedence so runtime and migrations target the same database.
+loadEnv({ path: ".env.local" });
+loadEnv();
 
 const connectionString =
 	process.env.POSTGRES_PRISMA_URL ??
