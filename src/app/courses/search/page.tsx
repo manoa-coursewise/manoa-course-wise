@@ -1,69 +1,72 @@
-'use client';
-
-import { useState } from "react";
-import Filters from "@/components/Filters";
+import { prisma } from "@/lib/prisma";
 import CourseCard from "@/components/CourseCard";
 import './search.css';
 
+const toFixed = (value: number) => Number(value.toFixed(1));
 
-const allCourses = [
-  {
-    code: "ICS 311",
-    department: "ICS",
-    title: "Algorithms",
-    professor: "Kyle Berney",
-    rating: 4.7,
-    reviews: 218,
-    difficulty: 4.1,
-    workload: 3.9,
-    clarity: 4.8,
-    tags: ["Heavy Reading", "Strong Lectures", "Tough Exams"],
-  },
-  {
-    code: "MATH 242",
-    department: "MATH",
-    title: "Calculus II",
-    professor: "Austin Anderson",
-    rating: 4.3,
-    reviews: 167,
-    difficulty: 4.2,
-    workload: 3.7,
-    clarity: 4.5,
-    tags: ["Integration Heavy", "Series & Sequences"],
-  },
-  {
-    code: "ECON 101",
-    department: "ECON",
-    title: "Intro to Economics",
-    professor: "Jane Smith",
-    rating: 4.0,
-    reviews: 120,
-    difficulty: 3.5,
-    workload: 3.2,
-    clarity: 4.1,
-    tags: ["Light Reading"],
-  },
-];
+export default async function App() {
+  const courses = await prisma.course.findMany({
+    where: {
+      classId: {
+        startsWith: 'ICS ',
+      },
+    },
+    include: {
+      professors: {
+        orderBy: {
+          name: 'asc',
+        },
+      },
+      reviews: {
+        orderBy: {
+          createdAt: 'desc',
+        },
+      },
+    },
+    orderBy: {
+      classId: 'asc',
+    },
+  });
 
-export default function App() {
-  const [selectedDepartments, setSelectedDepartments] = useState([
-    "ICS",
-    "MATH",
-  ]);
+  const allCourses = courses.map((course) => {
+    const reviewCount = course.reviews.length;
+    const totals = course.reviews.reduce(
+      (acc, review) => {
+        acc.rating += review.rating;
+        acc.difficulty += review.difficulty;
+        acc.workload += review.workload;
+        acc.clarity += review.clarity;
+        return acc;
+      },
+      { rating: 0, difficulty: 0, workload: 0, clarity: 0 },
+    );
 
-  const [sortOption, setSortOption] = useState("lowToHigh");
+    const tagCounts = new Map<string, number>();
+    course.reviews.forEach((review) => {
+      review.tags.forEach((tag) => {
+        tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
+      });
+    });
 
-  // 🔍 Filtering logic
-  const filteredCourses = allCourses.filter((course) =>
-    selectedDepartments.includes(course.department)
-  );
+    const tags = [...tagCounts.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 3)
+      .map(([tag]) => tag);
 
-  // 🔃 Sorting logic
-  const sortedCourses = [...filteredCourses].sort((a, b) => {
-    if (sortOption === "lowToHigh") return a.difficulty - b.difficulty;
-    if (sortOption === "highToLow") return b.difficulty - a.difficulty;
-    if (sortOption === "rating") return b.rating - a.rating;
-    return 0;
+    const leadProfessor = course.professors[0]?.name ?? 'TBA';
+
+    return {
+      code: course.classId,
+      department: 'ICS',
+      title: course.name,
+      professor: leadProfessor,
+      rating: reviewCount ? toFixed(totals.rating / reviewCount) : 0,
+      reviews: reviewCount,
+      difficulty: reviewCount ? toFixed(totals.difficulty / reviewCount) : 0,
+      workload: reviewCount ? toFixed(totals.workload / reviewCount) : 0,
+      clarity: reviewCount ? toFixed(totals.clarity / reviewCount) : 0,
+      tags,
+    };
   });
 
   return (
@@ -71,47 +74,27 @@ export default function App() {
 
       <div className="container mt-4">
         <div className="row">
-          <div className="col-md-3">
-            <Filters
-              selectedDepartments={selectedDepartments}
-              setSelectedDepartments={setSelectedDepartments}
-            />
-          </div>
-
-          <div className="col-md-9">
+          <div className="col-md-12">
             <div className="d-flex justify-content-between align-items-center mb-3">
               <div>
                 <h2>Courses</h2>
                 <p className="text-muted">
-                  Showing {sortedCourses.length} results
+                  Showing {allCourses.length} ICS results
                 </p>
               </div>
-
-              <select
-                className="form-select w-auto"
-                onChange={(e) => setSortOption(e.target.value)}
-              >
-                <option value="lowToHigh">Difficulty (Low to High)</option>
-                <option value="highToLow">Difficulty (High to Low)</option>
-                <option value="rating">Rating</option>
-              </select>
             </div>
 
             <div className="row">
-              {sortedCourses.map((course, idx) => (
-                <div className="col-md-6 mb-4" key={idx}>
-                  <a href={`/courses/details/${course.code}/${course.professor}`}>
+              {allCourses.map((course) => (
+                <div className="col-md-6 mb-4" key={course.code}>
+                  <a href={`/courses/details/${encodeURIComponent(course.code)}/${encodeURIComponent(course.professor)}`}>
                     <CourseCard course={course} />
                   </a>
                 </div>
               ))}
             </div>
 
-            <div className="text-center mt-4">
-              <button className="btn btn-success px-5 py-2">
-                Load More Courses
-              </button>
-            </div>
+            {allCourses.length === 0 && <p className="text-muted">No ICS courses found in the database yet.</p>}
           </div>
         </div>
       </div>
