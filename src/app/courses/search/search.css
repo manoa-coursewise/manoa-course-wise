@@ -1,8 +1,15 @@
 .course-search-page {
-  background-color: #f6f7f9;
-  background: linear-gradient(135deg, #1a5f5f 0%, #2a7f7f 50%, #1a5f5f 100%);
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
-  padding-bottom: 2rem;
+  background: linear-gradient(135deg, #1a5f5f 0%, #2a7f7f 50%, #1a5f5f 100%);
+  z-index: 0;
+}
+
+main.course-search-page > .container {
+  position: relative;
+  z-index: 1;
 }
 
 .course-search-page h2 {
@@ -11,6 +18,23 @@
 
 .course-search-page .card {
   border-radius: 12px;
+}
+
+/* Quick fix: Scope Bootstrap grid and card styles to avoid template interference */
+.course-search-page .row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.course-search-page .col-md-6 {
+  padding-left: 0.5rem !important;
+  padding-right: 0.5rem !important;
+}
+
+.course-search-page .card {
+  margin-bottom: 0;
+  box-shadow: 0 2px 8px rgba(26, 95, 95, 0.08);
+  background: #fff;
 }
 
 .course-search-page .btn-success {
