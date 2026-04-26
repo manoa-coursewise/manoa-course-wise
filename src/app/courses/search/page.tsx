@@ -70,8 +70,7 @@ export default async function App() {
   });
 
   return (
-    <div className="course-search-page">
-
+    <main className="course-search-page">
       <div className="container mt-4">
         <div className="row">
           <div className="col-md-12">
@@ -83,7 +82,6 @@ export default async function App() {
                 </p>
               </div>
             </div>
-
             <div className="row">
               {allCourses.map((course) => (
                 <div className="col-md-6 mb-4" key={course.code}>
@@ -93,11 +91,10 @@ export default async function App() {
                 </div>
               ))}
             </div>
-
             {allCourses.length === 0 && <p className="text-muted">No ICS courses found in the database yet.</p>}
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
