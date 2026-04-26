@@ -2,7 +2,7 @@ import { prisma } from './lib/prisma';
 import { Role, Condition } from '@prisma/client';
 import { hash } from 'bcrypt';
 import * as config from '../config/settings.development.json';
-import { courseData } from './lib/courseData';
+//import { courseData } from './lib/courseData';
 
 async function main() {
   console.log('Seeding the database');
@@ -36,34 +36,34 @@ async function main() {
     });
   }
 
-  for (const course of courseData.filter((entry) => entry.code.startsWith('ICS '))) {
-    const createdCourse = await prisma.course.upsert({
-      where: { classId: course.code },
-      update: {
-        name: course.name,
-      },
-      create: {
-        classId: course.code,
-        name: course.name,
-      },
-    });
-
-    for (const professor of [...new Set(course.professors.map((name) => name.trim()).filter(Boolean))]) {
-      await prisma.professor.upsert({
-        where: {
-          courseId_name: {
-            courseId: createdCourse.id,
-            name: professor,
-          },
-        },
-        update: {},
-        create: {
-          courseId: createdCourse.id,
-          name: professor,
-        },
-      });
-    }
-  }
+  // for (const course of courseData.filter((entry) => entry.code.startsWith('ICS '))) {
+  //   const createdCourse = await prisma.course.upsert({
+  //     where: { classId: course.code },
+  //     update: {
+  //       name: course.name,
+  //     },
+  //     create: {
+  //       classId: course.code,
+  //       name: course.name,
+  //     },
+  //   });
+  //
+  //   for (const professor of [...new Set(course.professors.map((name) => name.trim()).filter(Boolean))]) {
+  //     await prisma.professor.upsert({
+  //       where: {
+  //         courseId_name: {
+  //           courseId: createdCourse.id,
+  //           name: professor,
+  //         },
+  //       },
+  //       update: {},
+  //       create: {
+  //         courseId: createdCourse.id,
+  //         name: professor,
+  //       },
+  //     });
+  //   }
+  // }
 
   const ics311 = await prisma.course.findUnique({
     where: { classId: 'ICS 311' },

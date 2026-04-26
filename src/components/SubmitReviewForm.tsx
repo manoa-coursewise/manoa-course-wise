@@ -10,7 +10,7 @@ import { redirect } from 'next/navigation';
 import { addReview } from '@/lib/dbActions';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import { SubmitReviewSchema } from '@/lib/validationSchemas';
-import { courseData } from '@/lib/courseData';
+import { Course, Professor } from '@prisma/client';
 import styles from './SubmitReviewForm.module.css';
 
 const tagOptions = [
@@ -42,10 +42,14 @@ const semesterOptions = [
   'Spring 2026',
 ];
 
-const SubmitReviewForm: React.FC = () => {
+type SubmitReviewFormProps = {
+  courses: (Course & { professors: Professor[] })[];
+};
+
+const SubmitReviewForm: React.FC<SubmitReviewFormProps> = ({ courses }) => {
   const { data: session, status } = useSession();
   const currentUser = session?.user?.email || '';
-  const [professors, setProfessors] = useState<string[]>(courseData[0]?.professors ?? []);
+  const [professors, setProfessors] = useState<string[]>(courses[0]?.professors.map((p) => p.name) ?? []);
   const {
     register,
     handleSubmit,
@@ -77,7 +81,7 @@ const SubmitReviewForm: React.FC = () => {
   };
 
   const onSubmit = async (data: ReviewFormData, selectedTags: string[]) => {
-    const selectedCourse = courseData.find((c) => c.code === data.courseCode);
+    const selectedCourse = courses.find((c) => c.classId === data.courseCode);
     await addReview({
       courseCode: data.courseCode,
       courseName: selectedCourse?.name ?? data.courseCode,
@@ -126,13 +130,13 @@ const SubmitReviewForm: React.FC = () => {
                     className={`form-select ${errors.courseCode ? 'is-invalid' : ''}`}
                     onChange={(e) => {
                       const code = e.target.value;
-                      const found = courseData.find((c) => c.code === code);
-                      setProfessors(found?.professors ?? []);
+                      const found = courses.find((c) => c.classId === code);
+                      setProfessors(found?.professors.map((p) => p.name) ?? []);
                     }}
                   >
-                    {courseData.map((c) => (
-                      <option key={c.code} value={c.code}>
-                        {c.code}
+                    {courses.map((c) => (
+                      <option key={c.classId} value={c.classId}>
+                        {c.classId}
                       </option>
                     ))}
                   </select>
