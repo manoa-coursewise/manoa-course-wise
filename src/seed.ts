@@ -2,7 +2,7 @@ import { prisma } from './lib/prisma';
 import { Role, Condition } from '@prisma/client';
 import { hash } from 'bcrypt';
 import * as config from '../config/settings.development.json';
-import { courseData } from './lib/courseData';
+//import { courseData } from './lib/courseData';
 
 async function main() {
   console.log('Seeding the database');
