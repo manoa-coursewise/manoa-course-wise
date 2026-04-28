@@ -46,6 +46,12 @@ async function authenticateWithUI(
       expect(userButton).toBeVisible({ timeout: 10000 }),
       expect(signOutButton).toBeVisible({ timeout: 10000 })
     ]);
+
+    // Ensure the redirect triggered by signin has fully settled before tests start
+    // issuing their own navigation calls (prevents interrupted goto in WebKit).
+    await page.waitForURL('**/dashboard', { timeout: 10000 });
+    await page.waitForLoadState('networkidle');
+
     console.log(`✓ Successfully authenticated ${email}`);
   } catch (error) {
     console.error(`× Authentication failed for ${email}:`, error);
