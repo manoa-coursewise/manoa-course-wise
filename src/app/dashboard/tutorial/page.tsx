@@ -88,7 +88,7 @@ const TutorialPage = () => {
                   <li>Average rating (0-5 stars)</li>
                   <li>Number of reviews</li>
                   <li>Difficulty, Workload, and Clarity ratings</li>
-                    <li>Top tags (e.g., &quot;Homework heavy&quot;, &quot;Challenging&quot;)</li>
+                  <li>Top tags (e.g., &quot;Homework heavy&quot;, &quot;Challenging&quot;)</li>
                 </ul>
               </Card.Body>
             </Card>
@@ -120,7 +120,7 @@ const TutorialPage = () => {
               </Card.Header>
               <Card.Body>
                 <h5 style={{ color: '#1a5f5f' }}>Step 1: Navigate to Submit Review</h5>
-                  <p>Click <strong>&quot;Submit Review&quot;</strong> in the navigation bar.</p>
+                <p>Click <strong>&quot;Submit Review&quot;</strong> in the navigation bar.</p>
 
                 <h5 style={{ color: '#1a5f5f' }}>Step 2: Select Course & Professor</h5>
                 <ul>
@@ -155,7 +155,7 @@ const TutorialPage = () => {
                 </ul>
 
                 <h5 style={{ color: '#1a5f5f' }}>Step 7: Choose Anonymous</h5>
-                  <p>Check the anonymous box if you don&apos;t want your email to be displayed.</p>
+                <p>Check the anonymous box if you don&apos;t want your email to be displayed.</p>
 
                 <div style={{ 
                   backgroundColor: '#d4edda', 
@@ -226,13 +226,13 @@ const TutorialPage = () => {
                 <p>No! You can browse courses and read reviews without signing in. However, you need an account to submit reviews.</p>
 
                 <h5 style={{ color: '#1a5f5f' }}>How do I create an account?</h5>
-                  <p>Click <strong>&quot;Login&quot;</strong> in the navigation bar, then click <strong>&quot;Sign Up&quot;</strong> at the bottom of the form.</p>
+                <p>Click <strong>&quot;Login&quot;</strong> in the navigation bar, then click <strong>&quot;Sign Up&quot;</strong> at the bottom of the form.</p>
 
                 <h5 style={{ color: '#1a5f5f' }}>Can I edit or delete my reviews?</h5>
                 <p>Currently, you can view your reviews in your dashboard. Contact an administrator if you need to modify or remove a review.</p>
 
                 <h5 style={{ color: '#1a5f5f' }}>Are my reviews anonymous?</h5>
-                  <p>You can choose to make your review anonymous by checking the anonymous option when submitting. Anonymous reviews won&apos;t show your email.</p>
+                <p>You can choose to make your review anonymous by checking the anonymous option when submitting. Anonymous reviews won&apos;t show your email.</p>
 
                 <h5 style={{ color: '#1a5f5f' }}>What do the tags mean?</h5>
                 <ul>

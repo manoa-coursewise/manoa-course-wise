@@ -86,9 +86,14 @@ const UserDashboard: React.FC<UserDashboardProps> = ({ user }) => {
               <Card.Body>
                 <p><strong>Reviews Submitted:</strong> {reviews.length}</p>
                 <p><strong>Average Rating Given:</strong> {averageRating}</p>
-                <Button variant="outline-danger" onClick={() => alert('Logging out...')}>
-                  Log Out
-                </Button>
+                <div className="d-flex gap-2">
+                  <Button variant="outline-primary" onClick={() => router.push('/dashboard/tutorial')}>
+                    Help & Tutorial
+                  </Button>
+                  <Button variant="outline-danger" onClick={() => alert('Logging out...')}>
+                    Log Out
+                  </Button>
+                </div>
               </Card.Body>
             </Card>
           </Col>

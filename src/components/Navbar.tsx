@@ -27,9 +27,6 @@ const NavBar: React.FC = () => {
             <Nav.Link href="#professors" className="mx-2 app-nav-link">
               Professors
             </Nav.Link>
-            <Nav.Link href="#schedule-builder" className="mx-2 app-nav-link">
-              Schedule Builder
-            </Nav.Link>
             <Nav.Link href="/reviews/submit" className="mx-2 app-nav-link">
               Submit Review
             </Nav.Link>
