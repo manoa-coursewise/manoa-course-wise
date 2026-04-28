@@ -1,32 +1,25 @@
-import '../../details.css';
 import { Button } from 'react-bootstrap';
-import { prisma } from '@/lib/prisma';
-import { notFound } from 'next/navigation';
+import type { Prisma } from '@prisma/client';
+
+type CourseWithDetails = Prisma.CourseGetPayload<{
+  include: {
+    professors: {
+      orderBy: { name: 'asc' };
+    };
+    reviews: {
+      include: {
+        professor: true;
+      };
+      orderBy: {
+        createdAt: 'desc';
+      };
+    };
+  };
+}>;
 
 const toFixed = (value: number) => Number(value.toFixed(1));
 
-const CourseDetail = async () => {
-  const course = await prisma.course.findUnique({
-    where: { classId: 'ICS 311' },
-    include: {
-      professors: {
-        orderBy: { name: 'asc' },
-      },
-      reviews: {
-        include: {
-          professor: true,
-        },
-        orderBy: {
-          createdAt: 'desc',
-        },
-      },
-    },
-  });
-
-  if (!course) {
-    notFound();
-  }
-
+const CourseDetailView = ({ course }: { course: CourseWithDetails }) => {
   const reviewCount = course.reviews.length;
   const total = course.reviews.reduce(
     (acc, review) => {
@@ -50,6 +43,7 @@ const CourseDetail = async () => {
       tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
     });
   });
+
   const topTags = [...tagCounts.entries()]
     .sort((a, b) => b[1] - a[1])
     .slice(0, 8)
@@ -57,9 +51,7 @@ const CourseDetail = async () => {
 
   return (
     <div className="course-details-page">
-
       <div className="container mt-4">
-        {/* Top Card */}
         <div className="card p-4 shadow-sm mb-4">
           <div className="d-flex justify-content-between">
             <div>
@@ -90,7 +82,6 @@ const CourseDetail = async () => {
           </div>
         </div>
 
-        {/* Tags */}
         <div className="mb-4">
           <h5 className="course-section-title">Common Student Feedback</h5>
           <div className="mt-2">
@@ -103,9 +94,7 @@ const CourseDetail = async () => {
           </div>
         </div>
 
-        {/* Main Content */}
         <div className="row">
-          {/* Reviews */}
           <div className="col-md-8">
             <div className="d-flex justify-content-between align-items-center mb-3">
               <h4 className="course-section-title">Student Reviews</h4>
@@ -130,8 +119,7 @@ const CourseDetail = async () => {
                 <p className="mt-2">{review.text}</p>
 
                 <small className="text-muted">
-                  Difficulty: {review.difficulty} | Workload:{" "}
-                  {review.workload} | Clarity: {review.clarity}
+                  Difficulty: {review.difficulty} | Workload: {review.workload} | Clarity: {review.clarity}
                 </small>
 
                 {review.tags.length > 0 && (
@@ -147,7 +135,6 @@ const CourseDetail = async () => {
             ))}
           </div>
 
-          {/* Sidebar */}
           <div className="col-md-4">
             <div className="card p-3 shadow-sm">
               <h5>Course Schedule</h5>
@@ -155,17 +142,17 @@ const CourseDetail = async () => {
               <div className="mt-3">
                 <div className="d-flex justify-content-between">
                   <span className="text-muted">Typical Time</span>
-                  <span>MWF 10:30 AM - 11:20 AM</span>
+                  <span>TBA</span>
                 </div>
 
                 <div className="d-flex justify-content-between mt-2">
                   <span className="text-muted">Best Semester</span>
-                  <span className="text-success">Fall</span>
+                  <span className="text-success">TBA</span>
                 </div>
 
                 <div className="d-flex justify-content-between mt-2">
                   <span className="text-muted">Credits</span>
-                  <span>3</span>
+                  <span>TBA</span>
                 </div>
               </div>
 
@@ -181,6 +168,6 @@ const CourseDetail = async () => {
       </div>
     </div>
   );
-}
+};
 
-export default CourseDetail;
+export default CourseDetailView;
