@@ -16,6 +16,14 @@ main.course-search-page > .container {
     color: white;
 }
 
+.course-search-page .course-results-summary {
+  color: rgba(248, 253, 252, 0.92) !important;
+}
+
+.course-search-page .course-empty-state {
+  color: rgba(248, 253, 252, 0.9) !important;
+}
+
 .course-search-page .card {
   border-radius: 12px;
 }

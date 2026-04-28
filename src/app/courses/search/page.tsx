@@ -77,7 +77,7 @@ export default async function App() {
             <div className="d-flex justify-content-between align-items-center mb-3">
               <div>
                 <h2>Courses</h2>
-                <p className="text-muted">
+                <p className="course-results-summary">
                   Showing {allCourses.length} ICS results
                 </p>
               </div>
@@ -91,7 +91,7 @@ export default async function App() {
                 </div>
               ))}
             </div>
-            {allCourses.length === 0 && <p className="text-muted">No ICS courses found in the database yet.</p>}
+            {allCourses.length === 0 && <p className="course-empty-state">No ICS courses found in the database yet.</p>}
           </div>
         </div>
       </div>
