@@ -89,3 +89,18 @@ This project now models:
 
 - `prisma migrate deploy` is safe for CI/CD and production deploys.
 - Use `npx prisma studio` locally to verify Course/Professor/Review relations.
+
+## Playwright CI Stability Note
+
+We addressed a cross-browser Playwright flake that appeared in CI for authenticated routes.
+
+- Symptom: tests intermittently redirected from protected pages (for example, `/list`) to `/auth/signin`, mostly in WebKit/Firefox.
+- Root cause: the old auth fixture reused persisted cookie files across parallel browser projects, and signin used client-side routing immediately after `signIn({ redirect: false })`, which could race session persistence.
+- Fix: tests now authenticate fresh per browser context in `tests/auth-utils.ts`, and successful signin performs a full-page navigation to `/dashboard` in `src/app/auth/signin/page.tsx`.
+
+If this flake reappears, run:
+
+```bash
+npm run lint
+npm run playwright
+```
