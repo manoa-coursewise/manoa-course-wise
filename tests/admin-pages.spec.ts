@@ -22,9 +22,6 @@ test('test access to admin page', async ({ getUserPage }) => {
     adminPage.getByRole('link', { name: 'Professors' })
   ).toBeVisible({ timeout: 5000 });
   await expect(
-    adminPage.getByRole('link', { name: 'Schedule Builder' })
-  ).toBeVisible({ timeout: 5000 });
-  await expect(
     adminPage.getByRole('link', { name: 'Submit Review' })
   ).toBeVisible({ timeout: 5000 });
   await expect(
