@@ -92,9 +92,9 @@ const CourseDetail = async () => {
 
         {/* Tags */}
         <div className="mb-4">
-          <h5>Common Student Feedback</h5>
+          <h5 className="course-section-title">Common Student Feedback</h5>
           <div className="mt-2">
-            {topTags.length === 0 && <p className="text-muted mb-0">No tags yet.</p>}
+            {topTags.length === 0 && <p className="course-section-muted mb-0">No tags yet.</p>}
             {topTags.map((tag, idx) => (
               <span key={`${tag}-${idx}`} className="badge bg-light text-dark me-2 mb-2 p-2">
                 {tag}
@@ -108,7 +108,7 @@ const CourseDetail = async () => {
           {/* Reviews */}
           <div className="col-md-8">
             <div className="d-flex justify-content-between align-items-center mb-3">
-              <h4>Student Reviews</h4>
+              <h4 className="course-section-title">Student Reviews</h4>
               <Button className="btn btn-success border" href="/reviews/submit">Write a Review</Button>
             </div>
 
