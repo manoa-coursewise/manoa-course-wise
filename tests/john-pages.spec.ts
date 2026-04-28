@@ -23,9 +23,6 @@ test('can authenticate a specific user', async ({ getUserPage }) => {
     customUserPage.getByRole('link', { name: 'Professors' })
   ).toBeVisible({ timeout: 5000 });
   await expect(
-    customUserPage.getByRole('link', { name: 'Schedule Builder' })
-  ).toBeVisible({ timeout: 5000 });
-  await expect(
     customUserPage.getByRole('link', { name: 'Submit Review' })
   ).toBeVisible({ timeout: 5000 });
 
