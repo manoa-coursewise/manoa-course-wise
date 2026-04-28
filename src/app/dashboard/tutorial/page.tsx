@@ -46,8 +46,8 @@ const TutorialPage = () => {
           <Col lg={8}>
             {/* Getting Started */}
             <Card className="mb-4">
-              <Card.Header style={{ backgroundColor: '#1a5f5f', color: 'white' }}>
-                <h4 className="mb-0">🚀 Getting Started</h4>
+              <Card.Header style={{ backgroundColor: '#1a5f5f' }}>
+                <h4 className="mb-0" style={{ color: 'white' }}>🚀 Getting Started</h4>
               </Card.Header>
               <Card.Body>
                 <h5 style={{ color: '#1a5f5f' }}>Welcome to Mānoa CourseWise, {user?.name || user?.email || 'Student'}!</h5>
@@ -65,8 +65,8 @@ const TutorialPage = () => {
 
             {/* Finding Courses */}
             <Card className="mb-4">
-              <Card.Header style={{ backgroundColor: '#1a5f5f', color: 'white' }}>
-                <h4 className="mb-0">🔍 How to Find Courses</h4>
+              <Card.Header style={{ backgroundColor: '#1a5f5f' }}>
+                <h4 className="mb-0" style={{ color: 'white' }}>🔍 How to Find Courses</h4>
               </Card.Header>
               <Card.Body>
                 <h5 style={{ color: '#1a5f5f' }}>Method 1: Search Bar</h5>
@@ -95,8 +95,8 @@ const TutorialPage = () => {
 
             {/* Reading Reviews */}
             <Card className="mb-4">
-              <Card.Header style={{ backgroundColor: '#1a5f5f', color: 'white' }}>
-                <h4 className="mb-0">📖 Reading Course Reviews</h4>
+              <Card.Header style={{ backgroundColor: '#1a5f5f' }}>
+                <h4 className="mb-0" style={{ color: 'white' }}>📖 Reading Course Reviews</h4>
               </Card.Header>
               <Card.Body>
                 <p>Click on any course card to view its detailed page, which shows:</p>
@@ -115,8 +115,8 @@ const TutorialPage = () => {
 
             {/* Submitting Reviews */}
             <Card className="mb-4">
-              <Card.Header style={{ backgroundColor: '#1a5f5f', color: 'white' }}>
-                <h4 className="mb-0">✍️ How to Submit a Review</h4>
+              <Card.Header style={{ backgroundColor: '#1a5f5f' }}>
+                <h4 className="mb-0" style={{ color: 'white' }}>✍️ How to Submit a Review</h4>
               </Card.Header>
               <Card.Body>
                 <h5 style={{ color: '#1a5f5f' }}>Step 1: Navigate to Submit Review</h5>
@@ -171,8 +171,8 @@ const TutorialPage = () => {
 
             {/* Understanding Ratings */}
             <Card className="mb-4">
-              <Card.Header style={{ backgroundColor: '#1a5f5f', color: 'white' }}>
-                <h4 className="mb-0">⭐ Understanding the Ratings</h4>
+              <Card.Header style={{ backgroundColor: '#1a5f5f' }}>
+                <h4 className="mb-0" style={{ color: 'white' }}>⭐ Understanding the Ratings</h4>
               </Card.Header>
               <Card.Body>
                 <p>Each course has several ratings to help you understand what to expect:</p>
@@ -218,8 +218,8 @@ const TutorialPage = () => {
 
             {/* FAQ */}
             <Card className="mb-4">
-              <Card.Header style={{ backgroundColor: '#1a5f5f', color: 'white' }}>
-                <h4 className="mb-0">❓ Frequently Asked Questions</h4>
+              <Card.Header style={{ backgroundColor: '#1a5f5f' }}>
+                <h4 className="mb-0" style={{ color: 'white' }}>❓ Frequently Asked Questions</h4>
               </Card.Header>
               <Card.Body>
                 <h5 style={{ color: '#1a5f5f' }}>Do I need an account to browse courses?</h5>
@@ -251,8 +251,8 @@ const TutorialPage = () => {
 
             {/* Quick Reference */}
             <Card>
-              <Card.Header style={{ backgroundColor: '#1a5f5f', color: 'white' }}>
-                <h4 className="mb-0">📋 Quick Reference</h4>
+              <Card.Header style={{ backgroundColor: '#1a5f5f' }}>
+                <h4 className="mb-0" style={{ color: 'white' }}>📋 Quick Reference</h4>
               </Card.Header>
               <Card.Body>
                 <Row>
@@ -284,8 +284,8 @@ const TutorialPage = () => {
           {/* Sidebar */}
           <Col lg={4}>
             <Card className="mb-4 sticky-top" style={{ top: '20px' }}>
-              <Card.Header style={{ backgroundColor: '#1a5f5f', color: 'white' }}>
-                <h5 className="mb-0">📚 Quick Links</h5>
+              <Card.Header style={{ backgroundColor: '#1a5f5f' }}>
+                <h5 className="mb-0" style={{ color: 'white' }}>📚 Quick Links</h5>
               </Card.Header>
               <Card.Body className="p-0">
                 <div className="list-group list-group-flush">
@@ -315,8 +315,8 @@ const TutorialPage = () => {
             </Card>
 
             <Card className="sticky-top" style={{ top: '220px' }}>
-              <Card.Header style={{ backgroundColor: '#1a5f5f', color: 'white' }}>
-                <h5 className="mb-0">💬 Need Help?</h5>
+              <Card.Header style={{ backgroundColor: '#1a5f5f' }}>
+                <h5 className="mb-0" style={{ color: 'white' }}>💬 Need Help?</h5>
               </Card.Header>
               <Card.Body>
                 <p>If you have questions or encounter issues:</p>
