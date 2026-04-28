@@ -1,20 +1,7 @@
 import { test as base, expect, Page } from '@playwright/test';
 
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 // Base configuration
 const BASE_URL = process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:3000';
-const SESSION_STORAGE_PATH = path.join(__dirname, 'playwright-auth-sessions');
-
-// Ensure session directory exists
-if (!fs.existsSync(SESSION_STORAGE_PATH)) {
-  fs.mkdirSync(SESSION_STORAGE_PATH, { recursive: true });
-}
 
 // Define our custom fixtures
 interface AuthFixtures {
@@ -27,41 +14,8 @@ async function authenticateWithUI(
   page: Page,
   email: string,
   password: string,
-  sessionName: string
 ): Promise<void> {
-  const sessionPath = path.join(SESSION_STORAGE_PATH, `${sessionName}.json`);
-
-  // Try to restore session from storage if available
-  if (fs.existsSync(sessionPath)) {
-    try {
-      const sessionData = JSON.parse(fs.readFileSync(sessionPath, 'utf8'));
-      await page.context().addCookies(sessionData.cookies);
-
-      // Navigate to homepage to verify session
-      await page.goto(BASE_URL);
-      await page.waitForLoadState('networkidle');
-
-      // Check if we're authenticated by looking for a sign-out option or user email
-      const isAuthenticated = await Promise.race([
-        page.getByText(email).isVisible().then((visible) => visible),
-        page.getByRole('button', { name: email }).isVisible().then((visible) => visible),
-        page.getByText('Sign out').isVisible().then((visible) => visible),
-        page.getByRole('button', { name: 'Sign out' }).isVisible().then((visible) => visible),
-        new Promise<boolean>((resolve) => setTimeout(() => resolve(false), 3000)),
-      ]);
-
-      if (isAuthenticated) {
-        console.log(`✓ Restored session for ${email}`);
-        return;
-      }
-
-      console.log(`× Saved session for ${email} expired, re-authenticating...`);
-    } catch (error) {
-      console.log(`× Error restoring session: ${error}`);
-    }
-  }
-
-  // If session restoration fails, authenticate via UI
+  // Always authenticate via UI to avoid flaky shared session files across parallel browser projects.
   try {
     console.log(`→ Authenticating ${email} via UI...`);
 
@@ -92,11 +46,7 @@ async function authenticateWithUI(
       expect(userButton).toBeVisible({ timeout: 10000 }),
       expect(signOutButton).toBeVisible({ timeout: 10000 })
     ]);
-
-    // Save session for future tests
-    const cookies = await page.context().cookies();
-    fs.writeFileSync(sessionPath, JSON.stringify({ cookies }));
-    console.log(`✓ Successfully authenticated ${email} and saved session`);
+    console.log(`✓ Successfully authenticated ${email}`);
   } catch (error) {
     console.error(`× Authentication failed for ${email}:`, error);
 
@@ -141,7 +91,7 @@ export const test = base.extend<AuthFixtures>({
       const context = await browser.newContext();
       const page = await context.newPage();
 
-      await authenticateWithUI(page, email, password, `session-${email}`);
+        await authenticateWithUI(page, email, password);
       return page;
     };
 

@@ -1,14 +1,12 @@
 'use client';
 
 import { signIn } from 'next-auth/react'; // v5 compatible
-import { useRouter } from 'next/navigation';
 import { useState, FormEvent, useRef, useEffect } from 'react';
 import '../auth.css';
 import { getAuthErrorMessage } from '@/lib/authErrorMessages';
 
 /** The sign in page. */
 const SignIn = () => {
-  const router = useRouter();
   const [error, setError] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
@@ -56,8 +54,9 @@ const SignIn = () => {
         setError(getAuthErrorMessage(result.error));
         setIsLoading(false);
       } else if (result?.ok) {
-        // Success - redirect to list page
-        router.push('/dashboard');
+        // Use a full-page navigation to ensure the auth cookie/session is persisted
+        // before protected server routes are requested (improves cross-browser stability).
+        window.location.assign('/dashboard');
       } else {
         setError(getAuthErrorMessage('UNKNOWN'));
         setIsLoading(false);
