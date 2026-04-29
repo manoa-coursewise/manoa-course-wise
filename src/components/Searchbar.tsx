@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState, useEffect } from "react";
+import { FormEvent, useState } from "react";
 
 interface SearchbarProps {
   onSearch: (query: string) => void;

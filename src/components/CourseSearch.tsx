@@ -6,15 +6,30 @@ import CourseCard, { Course } from "@/components/CourseCard";
 import Searchbar from "@/components/Searchbar";
 
 const CourseSearch = () => {
-  const [courses, setCourses] = useState<Course[]>([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [loading, setLoading] = useState(true);
   const searchParams = useSearchParams();
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [searchQuery, setSearchQuery] = useState(() => searchParams.get('query') || '');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const queryFromUrl = searchParams.get('query') || '';
-    setSearchQuery(queryFromUrl);
-  }, [searchParams]);
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch('/api/courses');
+        if (response.ok) {
+          const data: Course[] = await response.json();
+          setCourses(data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch courses:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourses();
+  }, []);
+
+  // ... rest of component
 
   useEffect(() => {
     const fetchCourses = async () => {
