@@ -29,26 +29,6 @@ const CourseSearch = () => {
     fetchCourses();
   }, []);
 
-  // ... rest of component
-
-  useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const response = await fetch('/api/courses');
-        if (response.ok) {
-          const data: Course[] = await response.json();
-          setCourses(data);
-        }
-      } catch (error) {
-        console.error('Failed to fetch courses:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCourses();
-  }, []);
-
   const filteredCourses = useMemo(() => {
     if (!searchQuery.trim()) {
       return courses;
