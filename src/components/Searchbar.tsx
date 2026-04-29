@@ -11,7 +11,7 @@ const Searchbar = ({ onSearch, initialQuery = "" }: SearchbarProps) => {
   const [query, setQuery] = useState(initialQuery);
 
   useEffect(() => {
-    setQuery(initialQuery);
+      setQuery(initialQuery);
   }, [initialQuery]);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {

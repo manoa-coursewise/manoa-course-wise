@@ -2,21 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import CourseCard from "@/components/CourseCard";
+import CourseCard, { Course } from "@/components/CourseCard";
 import Searchbar from "@/components/Searchbar";
-
-interface Course {
-  code: string;
-  department: string;
-  title: string;
-  professor: string;
-  rating: number;
-  reviews: number;
-  difficulty: number;
-  workload: number;
-  clarity: number;
-  tags: string[];
-}
 
 const CourseSearch = () => {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -25,16 +12,18 @@ const CourseSearch = () => {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    const queryFromUrl = searchParams.get('query') || '';
-    setSearchQuery(queryFromUrl);
-  }, [searchParams]);
+      const queryFromUrl = searchParams.get('query') || '';
+      if (queryFromUrl !== searchQuery) {
+        setSearchQuery(queryFromUrl);
+      }
+  }, [searchParams, searchQuery]);
 
   useEffect(() => {
     const fetchCourses = async () => {
       try {
         const response = await fetch('/api/courses');
         if (response.ok) {
-          const data = await response.json();
+          const data: Course[] = await response.json();
           setCourses(data);
         }
       } catch (error) {
