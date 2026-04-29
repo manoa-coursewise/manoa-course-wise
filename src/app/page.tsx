@@ -1,11 +1,24 @@
 'use client';
 
+import { FormEvent, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Col, Container, Row, Button, Form } from 'react-bootstrap';
 import { Search } from 'react-bootstrap-icons';
 import './landing.css';
 
 /** The Home page. */
-const Home = () => (
+const Home = () => {
+  const [query, setQuery] = useState('');
+  const router = useRouter();
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const trimmedQuery = query.trim();
+    const destination = trimmedQuery ? `/courses/search?query=${encodeURIComponent(trimmedQuery)}` : '/courses/search';
+    router.push(destination);
+  };
+
+  return (
   <main>
     {/* Hero Section */}
     <section className="hero-section">
@@ -16,12 +29,15 @@ const Home = () => (
 
           {/* Search Bar */}
           <div className="search-container mt-5">
-            <Form className="search-form">
+            <Form className="search-form" onSubmit={handleSubmit}>
               <Form.Group className="search-group">
                 <Form.Control
                   type="text"
                   placeholder="Search courses or professors... (e.g. ICS 311, MATH 242)"
                   className="search-input"
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  aria-label="Search courses or professors"
                 />
                 <Button className="search-button" type="submit">
                   <Search size={20} />
@@ -62,6 +78,6 @@ const Home = () => (
     </section>
   </main>
 );
+}
 
 export default Home;
-
