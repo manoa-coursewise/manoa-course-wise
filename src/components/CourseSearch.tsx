@@ -12,11 +12,9 @@ const CourseSearch = () => {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-      const queryFromUrl = searchParams.get('query') || '';
-      if (queryFromUrl !== searchQuery) {
-        setSearchQuery(queryFromUrl);
-      }
-  }, [searchParams, searchQuery]);
+    const queryFromUrl = searchParams.get('query') || '';
+    setSearchQuery(queryFromUrl);
+  }, [searchParams]);
 
   useEffect(() => {
     const fetchCourses = async () => {
