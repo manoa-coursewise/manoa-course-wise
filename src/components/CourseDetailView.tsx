@@ -50,7 +50,7 @@ const CourseDetailView = ({ course }: { course: CourseWithDetails }) => {
     .map(([tag]) => tag);
 
   return (
-    <div className="course-details-page">
+    <main className="course-details-page">
       <div className="container mt-4">
         <div className="card p-4 shadow-sm mb-4">
           <div className="d-flex justify-content-between">
@@ -166,7 +166,7 @@ const CourseDetailView = ({ course }: { course: CourseWithDetails }) => {
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 
