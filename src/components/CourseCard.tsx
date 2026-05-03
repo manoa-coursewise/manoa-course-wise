@@ -1,4 +1,4 @@
-interface Course {
+export interface Course {
   code: string;
   department: string;
   title: string;
@@ -47,9 +47,9 @@ const CourseCard = ({ course }: CourseCardProps) => {
       </div>
 
       <div className="mt-3">
-        {course.tags.map((tag, idx) => (
+        {course.tags.map((tag) => (
           <span
-            key={idx}
+            key={tag}
             className="badge bg-light text-dark me-2 mb-2"
           >
             {tag}
