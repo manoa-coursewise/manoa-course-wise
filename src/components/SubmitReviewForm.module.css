@@ -25,8 +25,13 @@
 
 .formTitle {
   color: #fff;
-  margin-bottom: 1rem;
+  margin-bottom: 2.5rem;
   text-align: center;
+}
+.cardBody :global(.form-group),
+.cardBody :global(.form-group) + :global(.form-group),
+.cardBody :global(.form-group) + * {
+  margin-top: 1.5rem;
 }
 
 .cardBody {
