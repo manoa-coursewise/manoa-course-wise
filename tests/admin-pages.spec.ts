@@ -15,17 +15,18 @@ test('test access to admin page', async ({ getUserPage }) => {
   await expect(
     adminPage.getByRole('link', { name: 'Mānoa CourseWise' })
   ).toBeVisible({ timeout: 5000 });
+  const adminNav = adminPage.locator('#basic-navbar-nav');
   await expect(
-    adminPage.getByRole('link', { name: 'Search Courses' })
+    adminNav.getByRole('link', { name: 'Search Courses' })
   ).toBeVisible({ timeout: 5000 });
   await expect(
-    adminPage.getByRole('link', { name: 'Professors' })
+    adminNav.getByRole('link', { name: 'Professors' })
   ).toBeVisible({ timeout: 5000 });
   await expect(
-    adminPage.getByRole('link', { name: 'Submit Review' })
+    adminNav.getByRole('link', { name: 'Submit Review' })
   ).toBeVisible({ timeout: 5000 });
   await expect(
-    adminPage.getByRole('link', { name: 'Admin' })
+    adminNav.getByRole('link', { name: 'Admin' })
   ).toBeVisible({ timeout: 5000 });
 
   // Test Admin page.
