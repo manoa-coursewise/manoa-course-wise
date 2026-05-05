@@ -43,7 +43,7 @@ const UserDashboard: React.FC<UserDashboardProps> = ({ user }) => {
         { id: 2, course: 'MATH 242', rating: 4, comment: 'Challenging but rewarding.' },
       ];
 
-      const fetchedSavedCourses = ['ECON 300', 'BIOL 172'];
+      const fetchedSavedCourses = ['ICS 311', 'MATH 242'];
 
       setReviews(fetchedReviews);
       setSavedCourses(fetchedSavedCourses);
