@@ -1,16 +1,26 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
 const toFixed = (value: number) => Number(value.toFixed(1));
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const department = req.nextUrl.searchParams.get('department');
+
+  const allowedDepartments = ['ICS', 'MATH'];
+  const prefix = department && allowedDepartments.includes(department.toUpperCase())
+    ? `${department.toUpperCase()} `
+    : null;
+
   try {
     const courses = await prisma.course.findMany({
-      where: {
-        classId: {
-          startsWith: 'ICS ',
-        },
-      },
+      where: prefix
+        ? { classId: { startsWith: prefix } }
+        : {
+            OR: [
+              { classId: { startsWith: 'ICS ' } },
+              { classId: { startsWith: 'MATH ' } },
+            ],
+          },
       include: {
         professors: {
           orderBy: {
@@ -57,7 +67,7 @@ export async function GET() {
 
       return {
         code: course.classId,
-        department: 'ICS',
+        department: course.classId.split(' ')[0],
         title: course.name,
         professor: leadProfessor,
         rating: reviewCount ? toFixed(totals.rating / reviewCount) : 0,
