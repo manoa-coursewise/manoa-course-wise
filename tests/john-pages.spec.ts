@@ -16,19 +16,20 @@ test('can authenticate a specific user', async ({ getUserPage }) => {
   await expect(
     customUserPage.getByRole('link', { name: 'Mānoa CourseWise' })
   ).toBeVisible({ timeout: 5000 });
+  const userNav = customUserPage.locator('#basic-navbar-nav');
   await expect(
-    customUserPage.getByRole('link', { name: 'Search Courses' })
+    userNav.getByRole('link', { name: 'Search Courses' })
   ).toBeVisible({ timeout: 5000 });
   await expect(
-    customUserPage.getByRole('link', { name: 'Professors' })
+    userNav.getByRole('link', { name: 'Professors' })
   ).toBeVisible({ timeout: 5000 });
   await expect(
-    customUserPage.getByRole('link', { name: 'Submit Review' })
+    userNav.getByRole('link', { name: 'Submit Review' })
   ).toBeVisible({ timeout: 5000 });
 
   // Standard users should not see admin navigation.
   await expect(
-    customUserPage.getByRole('link', { name: 'Admin' })
+    userNav.getByRole('link', { name: 'Admin' })
   ).toHaveCount(0);
 
   // Protected app pages are still valid and should be reachable when authenticated.
