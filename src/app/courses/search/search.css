@@ -54,6 +54,23 @@ main.course-search-page > .container {
   background-color: #17664c;
 }
 
+.course-search-page .btn-outline-success {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.6);
+  background-color: transparent;
+}
+
+.course-search-page .btn-outline-success:hover {
+  color: #1a5f5f;
+  background-color: #fff;
+  border-color: #fff;
+}
+
+.course-searchbar {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
 .course-searchbar .form-control {
   border-right: 0;
   border-radius: 0.5rem 0 0 0.5rem;
@@ -67,6 +84,7 @@ main.course-search-page > .container {
 
 .course-search-header {
   margin-bottom: 1.5rem;
+  padding-left: 0.5rem;
 }
 
 .course-search-page a {
