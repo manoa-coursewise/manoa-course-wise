@@ -8,11 +8,6 @@ const SubmitReview = async () => {
   const session = await auth();
   loggedInProtectedPage(session);
   const courses = await prisma.course.findMany({
-    where: {
-      classId: {
-        startsWith: 'ICS ',
-      },
-    },
     include: {
       professors: {
         orderBy: {

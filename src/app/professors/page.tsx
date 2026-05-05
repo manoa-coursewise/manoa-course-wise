@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import styles from '@/components/SubmitReviewForm.module.css';
 
 interface Professor {
@@ -18,6 +19,7 @@ export default function ProfessorsPage() {
   const [professors, setProfessors] = useState<Professor[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [sortBy, setSortBy] = useState<'name' | 'courseCode'>('name');
 
   useEffect(() => {
     const fetchProfessors = async () => {
@@ -35,6 +37,13 @@ export default function ProfessorsPage() {
     };
     fetchProfessors();
   }, []);
+
+  const sortedProfessors = [...professors].sort((a, b) => {
+    if (sortBy === 'courseCode') {
+      return a.course.classId.localeCompare(b.course.classId);
+    }
+    return a.name.localeCompare(b.name);
+  });
 
   if (loading) {
     return (
@@ -72,6 +81,21 @@ export default function ProfessorsPage() {
           ) : (
             <>
               <p className="mb-3">Total professors: {professors.length}</p>
+              <div className="mb-3">
+                <label className="me-2 fw-bold">Sort by:</label>
+                <button
+                  onClick={() => setSortBy('name')}
+                  className={`btn btn-sm me-2 ${sortBy === 'name' ? 'btn-primary' : 'btn-outline-secondary'}`}
+                >
+                  Alphabetically
+                </button>
+                <button
+                  onClick={() => setSortBy('courseCode')}
+                  className={`btn btn-sm ${sortBy === 'courseCode' ? 'btn-primary' : 'btn-outline-secondary'}`}
+                >
+                  By Course Code
+                </button>
+              </div>
               <div className="table-responsive">
                 <table className="table table-striped table-bordered align-middle mb-0">
                   <thead className="table-light">
@@ -82,10 +106,16 @@ export default function ProfessorsPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {professors.map((prof) => (
+                    {sortedProfessors.map((prof) => (
                       <tr key={prof.id}>
                         <td>{prof.name}</td>
-                        <td>{prof.course?.classId ?? ''}</td>
+                        <td>
+                          <Link
+                            href={`/courses/details/${encodeURIComponent(prof.course.classId)}/${encodeURIComponent(prof.name)}`}
+                          >
+                            {prof.course?.classId ?? ''}
+                          </Link>
+                        </td>
                         <td>{prof.course?.name ?? ''}</td>
                       </tr>
                     ))}

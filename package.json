@@ -12,6 +12,7 @@
     "lint": "eslint",
     "seed": "npx tsx src/seed.ts",
     "import:ics": "npx tsx src/scripts/importIcsCourses.ts",
+    "import:math": "npx tsx src/scripts/importMathCourses.ts",
     "playwright": "npx playwright test"
   },
   "prisma": {
