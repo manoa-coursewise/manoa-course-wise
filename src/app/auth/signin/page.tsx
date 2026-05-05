@@ -11,13 +11,14 @@ const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const emailRef = useRef<HTMLInputElement>(null);
+  const usernameRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
-  // Load saved email if "Remember me" was checked before
+  // Load saved username if "Remember me" was checked before
   useEffect(() => {
-    const savedEmail = localStorage.getItem('rememberedEmail');
-    if (savedEmail && emailRef.current) {
-      emailRef.current.value = savedEmail;
+    const savedUsername = localStorage.getItem('rememberedUsername');
+    if (savedUsername && usernameRef.current) {
+      usernameRef.current.value = savedUsername;
     }
   }, []);
 
@@ -27,25 +28,27 @@ const SignIn = () => {
     setIsLoading(true);
 
     const email = emailRef.current?.value || '';
+    const username = usernameRef.current?.value || '';
     const password = passwordRef.current?.value || '';
 
     // Basic validation
-    if (!email || !password) {
-      setError('Please enter both email and password');
+    if ((!email && !username) || !password) {
+      setError('Please enter email or username and password');
       setIsLoading(false);
       return;
     }
 
-    // Save email if remember me is checked
+    // Save username if remember me is checked
     if (rememberMe) {
-      localStorage.setItem('rememberedEmail', email);
+      localStorage.setItem('rememberedUsername', username || email);
     } else {
-      localStorage.removeItem('rememberedEmail');
+      localStorage.removeItem('rememberedUsername');
     }
 
     try {
       const result = await signIn('credentials', {
         email,
+        username,
         password,
         redirect: false,
       });
@@ -89,6 +92,19 @@ const SignIn = () => {
                 placeholder="you@example.com"
                 disabled={isLoading}
                 autoComplete="email"
+              />
+            </div>
+
+            <div className="auth-form-group">
+              <label className="auth-form-label">Username</label>
+              <input
+                ref={usernameRef}
+                name="username"
+                type="text"
+                className="auth-form-input"
+                placeholder="your_username"
+                disabled={isLoading}
+                autoComplete="username"
               />
             </div>
 
