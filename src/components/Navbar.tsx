@@ -24,7 +24,7 @@ const NavBar: React.FC = () => {
             <Nav.Link href="/courses/search" className="mx-2 app-nav-link">
               Search Courses
             </Nav.Link>
-            <Nav.Link href="#professors" className="mx-2 app-nav-link">
+            <Nav.Link href="/professors" className="mx-2 app-nav-link">
               Professors
             </Nav.Link>
             <Nav.Link href="/reviews/submit" className="mx-2 app-nav-link">
