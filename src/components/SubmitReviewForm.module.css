@@ -3,7 +3,7 @@
   color: white;
   padding: 80px 0;
   position: relative;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 .heroContent {

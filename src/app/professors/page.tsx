@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getAllProfessors } from '@/lib/dbActions';
+import styles from '@/components/SubmitReviewForm.module.css';
 
 interface Professor {
   id: number;
@@ -22,7 +22,9 @@ export default function ProfessorsPage() {
   useEffect(() => {
     const fetchProfessors = async () => {
       try {
-        const data = await getAllProfessors();
+        const res = await fetch('/api/professors');
+        if (!res.ok) throw new Error('Failed to fetch');
+        const data = await res.json();
         setProfessors(data);
       } catch (err) {
         setError('Failed to load professors');
@@ -31,60 +33,69 @@ export default function ProfessorsPage() {
         setLoading(false);
       }
     };
-
     fetchProfessors();
   }, []);
 
   if (loading) {
     return (
-      <div className="page-container">
-        <h1>Professors</h1>
-        <p>Loading professors...</p>
+      <div className={styles.heroSection}>
+        <div className="container py-4">
+          <div className="card shadow-sm p-4 mb-4">
+            <h2 className="mb-4">Professors</h2>
+            <p>Loading professors...</p>
+          </div>
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="page-container">
-        <h1>Professors</h1>
-        <p style={{ color: 'red' }}>{error}</p>
+      <div className={styles.heroSection}>
+        <div className="container py-4">
+          <div className="card shadow-sm p-4 mb-4">
+            <h2 className="mb-4">Professors</h2>
+            <p className="text-danger">{error}</p>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="page-container">
-      <h1>Professors Associated with Courses</h1>
-      {professors.length === 0 ? (
-        <p>No professors found in the database.</p>
-      ) : (
-        <div>
-          <p>Total professors: {professors.length}</p>
-          <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
-            <thead>
-              <tr style={{ backgroundColor: '#f0f0f0', borderBottom: '2px solid #ddd' }}>
-                <th style={{ padding: '10px', textAlign: 'left', borderRight: '1px solid #ddd' }}>
-                  Professor Name
-                </th>
-                <th style={{ padding: '10px', textAlign: 'left', borderRight: '1px solid #ddd' }}>
-                  Course Code
-                </th>
-                <th style={{ padding: '10px', textAlign: 'left' }}>Course Name</th>
-              </tr>
-            </thead>
-            <tbody>
-              {professors.map((prof) => (
-                <tr key={prof.id} style={{ borderBottom: '1px solid #ddd' }}>
-                  <td style={{ padding: '10px', borderRight: '1px solid #ddd' }}>{prof.name}</td>
-                  <td style={{ padding: '10px', borderRight: '1px solid #ddd' }}>{prof.course.classId}</td>
-                  <td style={{ padding: '10px' }}>{prof.course.name}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+    <div className={styles.heroSection}>
+      <div className="container py-4">
+        <div className="card shadow-sm p-4 mb-4">
+          <h2 className="mb-4">Professors Associated with Courses</h2>
+          {professors.length === 0 ? (
+            <p className="text-muted">No professors found in the database.</p>
+          ) : (
+            <>
+              <p className="mb-3">Total professors: {professors.length}</p>
+              <div className="table-responsive">
+                <table className="table table-striped table-bordered align-middle mb-0">
+                  <thead className="table-light">
+                    <tr>
+                      <th>Professor Name</th>
+                      <th>Course Code</th>
+                      <th>Course Name</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {professors.map((prof) => (
+                      <tr key={prof.id}>
+                        <td>{prof.name}</td>
+                        <td>{prof.course?.classId ?? ''}</td>
+                        <td>{prof.course?.name ?? ''}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 }
