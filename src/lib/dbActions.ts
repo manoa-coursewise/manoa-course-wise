@@ -218,3 +218,16 @@ export async function changePassword(credentials: { email: string; password: str
     throw new Error(mapPrismaAuthError(error));
   }
 }
+
+/**
+ * Retrieves all professors associated with courses in the database.
+ * @returns An array of professors with their associated course information.
+ */
+export async function getAllProfessors() {
+  return await prisma.professor.findMany({
+    include: {
+      course: true,
+    },
+    orderBy: [{ name: 'asc' }],
+  });
+}
