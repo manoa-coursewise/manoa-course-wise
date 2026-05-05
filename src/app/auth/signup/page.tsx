@@ -12,6 +12,7 @@ import { getAuthErrorMessage } from '@/lib/authErrorMessages';
 
 type SignUpForm = {
   email: string;
+  username: string;
   password: string;
   confirmPassword: string;
 };
@@ -24,6 +25,11 @@ const SignUp = () => {
 
   const validationSchema = Yup.object().shape({
     email: Yup.string().required('Email is required').email('Email is invalid'),
+    username: Yup.string()
+      .required('Username is required')
+      .min(3, 'Username must be at least 3 characters')
+      .max(20, 'Username must not exceed 20 characters')
+      .matches(/^[a-zA-Z0-9_]+$/, 'Username can only contain letters, numbers, and underscores'),
     password: Yup.string()
       .required('Password is required')
       .min(6, 'Password must be at least 6 characters')
@@ -98,6 +104,21 @@ const SignUp = () => {
               />
               {errors.email && (
                 <span className="auth-error-message">{errors.email.message}</span>
+              )}
+            </div>
+
+            <div className="auth-form-group">
+              <label className="auth-form-label">Username</label>
+              <input
+                type="text"
+                {...register('username')}
+                className={`auth-form-input ${errors.username ? 'is-invalid' : ''}`}
+                placeholder="Choose a username"
+                disabled={isLoading}
+                autoComplete="username"
+              />
+              {errors.username && (
+                <span className="auth-error-message">{errors.username.message}</span>
               )}
             </div>
 
