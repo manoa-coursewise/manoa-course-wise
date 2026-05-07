@@ -1,3 +1,8 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { Button } from 'react-bootstrap';
 import type { Prisma } from '@prisma/client';
 
@@ -49,6 +54,71 @@ const CourseDetailView = ({ course }: { course: CourseWithDetails }) => {
     .slice(0, 8)
     .map(([tag]) => tag);
 
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  const [isSaved, setIsSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+
+  const currentCourseId = course.classId;
+  const isAuthenticated = status === 'authenticated';
+
+  useEffect(() => {
+    if (status !== 'authenticated') {
+      return;
+    }
+
+    const loadSavedCourseState = async () => {
+      try {
+        const response = await fetch('/api/saved-courses', { cache: 'no-store' });
+        if (!response.ok) {
+          return;
+        }
+
+        const data = await response.json();
+        const saved = Array.isArray(data.savedCourses)
+          ? data.savedCourses.some((item: { classId: string }) => item.classId === currentCourseId)
+          : false;
+        setIsSaved(saved);
+      } catch (error) {
+        console.error('Failed to load saved course state:', error);
+      }
+    };
+
+    loadSavedCourseState();
+  }, [status, currentCourseId]);
+
+  const handleSaveCourse = async () => {
+    if (!isAuthenticated) {
+      router.push('/auth/signin');
+      return;
+    }
+
+    setSaveError(null);
+    setSaving(true);
+
+    try {
+      const response = await fetch('/api/saved-courses', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ classId: currentCourseId }),
+      });
+
+      if (!response.ok) {
+        const payload = await response.json().catch(() => null);
+        throw new Error(payload?.error ?? 'Failed to save course');
+      }
+
+      setIsSaved(true);
+    } catch (error) {
+      setSaveError((error as Error).message);
+    } finally {
+      setSaving(false);
+    }
+  };
+
   return (
     <main className="course-details-page">
       <div className="container mt-4">
@@ -98,8 +168,18 @@ const CourseDetailView = ({ course }: { course: CourseWithDetails }) => {
           <div className="col-12">
             <div className="d-flex justify-content-between align-items-center mb-3">
               <h4 className="course-section-title">Student Reviews</h4>
-              <Button className="btn btn-success border" href="/reviews/submit">Write a Review</Button>
+              <div className="d-flex gap-2">
+                <Button className="btn btn-success border" href="/reviews/submit">Write a Review</Button>
+                <Button
+                  className="btn btn-success border"
+                  onClick={handleSaveCourse}
+                  disabled={saving || isSaved}
+                >
+                  {isSaved ? 'Saved' : saving ? 'Saving...' : 'Save Course'}
+                </Button>
+              </div>
             </div>
+            {saveError && <p className="text-danger">{saveError}</p>}
 
             {course.reviews.length === 0 && (
               <div className="card p-3 mb-3 shadow-sm">
