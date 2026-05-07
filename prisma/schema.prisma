@@ -7,12 +7,13 @@ datasource db {
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  email    String   @unique
-  username String   @unique
-  password String
-  role     Role     @default(USER)
-  reviews  Review[]
+  id           Int           @id @default(autoincrement())
+  email        String        @unique
+  username     String        @unique
+  password     String
+  role         Role          @default(USER)
+  reviews      Review[]
+  savedCourses SavedCourse[]
 }
 
 model Stuff {
@@ -53,6 +54,7 @@ model Course {
   name       String
   professors Professor[]
   reviews    Review[]
+  savedBy    SavedCourse[]
 }
 
 model Professor {
@@ -64,6 +66,19 @@ model Professor {
 
   @@unique([courseId, name])
   @@index([name])
+}
+
+model SavedCourse {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId  Int
+  createdAt DateTime @default(now())
+
+  @@unique([userId, courseId])
+  @@index([userId])
+  @@index([courseId])
 }
 
 enum Role {

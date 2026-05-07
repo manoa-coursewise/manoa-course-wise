@@ -12,6 +12,11 @@ interface Review {
   comment: string;
 }
 
+interface SavedCourse {
+  classId: string;
+  name: string;
+}
+
 export interface User{
   name?: string | null;
   email?: string | null;
@@ -24,23 +29,29 @@ interface UserDashboardProps {
 const UserDashboard: React.FC<UserDashboardProps> = ({ user }) => {
   const router = useRouter();
   const [reviews, setReviews] = useState<Review[]>([]);
-  const [savedCourses, setSavedCourses] = useState<string[]>([]);
+  const [savedCourses, setSavedCourses] = useState<SavedCourse[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetchUserData() {
-      // Simulate fetching data or any async operation
-      const fetchedReviews = [
-        { id: 1, course: 'ICS 311', rating: 5, comment: 'Great course with engaging lectures!' },
-        { id: 2, course: 'MATH 242', rating: 4, comment: 'Challenging but rewarding.' },
-      ];
+    async function fetchDashboardData() {
+      try {
+        const response = await fetch('/api/dashboard', { cache: 'no-store' });
+        if (!response.ok) {
+          throw new Error('Unable to load dashboard data');
+        }
 
-      const fetchedSavedCourses = ['ICS 311', 'MATH 242'];
-
-      setReviews(fetchedReviews);
-      setSavedCourses(fetchedSavedCourses);
+        const data = await response.json();
+        setReviews(data.reviews ?? []);
+        setSavedCourses(data.savedCourses ?? []);
+      } catch (err) {
+        setError((err as Error)?.message ?? 'Failed to load dashboard data');
+      } finally {
+        setLoading(false);
+      }
     }
 
-    fetchUserData();
+    fetchDashboardData();
   }, []);
 
   // Calculate average rating from user reviews
@@ -53,6 +64,8 @@ const UserDashboard: React.FC<UserDashboardProps> = ({ user }) => {
     <main className="dashboard-main">
       <Container>
         <h2 className="mb-4">Welcome back, {user?.name || user?.email || 'Student'}!</h2>
+        {loading && <p>Loading your dashboard...</p>}
+        {error && <p className="text-danger">{error}</p>}
 
         <Row>
           <Col md={6}>
@@ -97,7 +110,9 @@ const UserDashboard: React.FC<UserDashboardProps> = ({ user }) => {
                   <ListGroup.Item>No saved courses.</ListGroup.Item>
                 ) : (
                   savedCourses.map((course, idx) => (
-                    <ListGroup.Item key={idx}>{course}</ListGroup.Item>
+                    <ListGroup.Item key={idx}>
+                      <strong>{course.classId}</strong> — {course.name}
+                    </ListGroup.Item>
                   ))
                 )}
               </ListGroup>
