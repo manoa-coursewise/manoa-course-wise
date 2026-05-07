@@ -1,8 +1,14 @@
+/* Force green background for dashboard */
+.course-search-page .dashboard-main {
+  background: linear-gradient(135deg, #1a5f5f 0%, #2a7f7f 50%, #1a5f5f 100%) !important;
+}
+/* Ensure dashboard cards are white on course-search-page */
+.course-search-page .dashboard-main .card {
+  background: #fff !important;
+}
 .dashboard-main {
   padding: 60px 20px;
-  background: #f8f9fa;
   min-height: 100vh;
-  color: #1a5f5f;
 }
 
 /* Welcome Header */
@@ -11,7 +17,7 @@
   font-weight: 700;
   margin-bottom: 40px;
   text-align: center;
-  color: #1a5f5f;
+  color: #fff;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
@@ -20,7 +26,6 @@
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(26, 95, 95, 0.15);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  background: white;
 }
 
 .dashboard-main .card:hover {
