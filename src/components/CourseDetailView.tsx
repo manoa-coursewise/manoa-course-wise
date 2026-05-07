@@ -95,7 +95,7 @@ const CourseDetailView = ({ course }: { course: CourseWithDetails }) => {
         </div>
 
         <div className="row">
-          <div className="col-md-8">
+          <div className="col-12">
             <div className="d-flex justify-content-between align-items-center mb-3">
               <h4 className="course-section-title">Student Reviews</h4>
               <Button className="btn btn-success border" href="/reviews/submit">Write a Review</Button>
@@ -133,36 +133,6 @@ const CourseDetailView = ({ course }: { course: CourseWithDetails }) => {
                 )}
               </div>
             ))}
-          </div>
-
-          <div className="col-md-4">
-            <div className="card p-3 shadow-sm">
-              <h5>Course Schedule</h5>
-
-              <div className="mt-3">
-                <div className="d-flex justify-content-between">
-                  <span className="text-muted">Typical Time</span>
-                  <span>TBA</span>
-                </div>
-
-                <div className="d-flex justify-content-between mt-2">
-                  <span className="text-muted">Best Semester</span>
-                  <span className="text-success">TBA</span>
-                </div>
-
-                <div className="d-flex justify-content-between mt-2">
-                  <span className="text-muted">Credits</span>
-                  <span>TBA</span>
-                </div>
-              </div>
-
-              <hr />
-
-              <h6>Add to Schedule</h6>
-              <button className="btn btn-success w-100 mt-2">
-                Add to My Schedule
-              </button>
-            </div>
           </div>
         </div>
       </div>
