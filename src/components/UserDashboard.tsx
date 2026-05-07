@@ -26,15 +26,6 @@ const UserDashboard: React.FC<UserDashboardProps> = ({ user }) => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [savedCourses, setSavedCourses] = useState<string[]>([]);
 
-  const schedule = [
-    { id: 1, course: 'ICS 311', day: 'Mon/Wed', time: '10:00 AM - 11:15 AM' },
-    { id: 2, course: 'MATH 242', day: 'Tue/Thu', time: '1:00 PM - 2:15 PM' },
-  ];
-
-  const handleViewCourses = () => {
-    router.push('/list');
-  };
-
   useEffect(() => {
     async function fetchUserData() {
       // Simulate fetching data or any async operation
@@ -110,29 +101,6 @@ const UserDashboard: React.FC<UserDashboardProps> = ({ user }) => {
                   ))
                 )}
               </ListGroup>
-            </Card>
-
-            <Card className="mb-4">
-              <Card.Header>Your Schedule</Card.Header>
-              <ListGroup variant="flush">
-                {schedule.length === 0 ? (
-                  <ListGroup.Item>No upcoming classes scheduled.</ListGroup.Item>
-                ) : (
-                  schedule.map(({ id, course, day, time }) => (
-                    <ListGroup.Item key={id}>
-                      <strong>{course}</strong>
-                      <p className="mb-0" style={{ color: '#6c757d' }}>
-                        {day} • {time}
-                      </p>
-                    </ListGroup.Item>
-                  ))
-                )}
-              </ListGroup>
-              <Card.Body>
-                <Button variant="outline-primary" onClick={handleViewCourses}>
-                  View Courses
-                </Button>
-              </Card.Body>
             </Card>
           </Col>
         </Row>
