@@ -25,7 +25,11 @@ const DashboardPage = () => {
     return null; // redirecting
   }
 
-  return <UserDashboard user={session.user as User}/>
+  return (
+    <main className="course-search-page">
+      <UserDashboard user={session.user as User} />
+    </main>
+  );
 };
 
 export default DashboardPage;

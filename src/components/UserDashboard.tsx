@@ -61,16 +61,15 @@ const UserDashboard: React.FC<UserDashboardProps> = ({ user }) => {
       : 'N/A';
 
   return (
-    <main className="dashboard-main">
-      <Container>
-        <h2 className="mb-4">Welcome back, {user?.name || user?.email || 'Student'}!</h2>
+    <div className="dashboard-main course-search-page">
+      <div className="container py-4">
+        <h2 className="mb-4 fw-bold">Welcome back, {user?.name || user?.email || 'Student'}!</h2>
         {loading && <p>Loading your dashboard...</p>}
         {error && <p className="text-danger">{error}</p>}
-
-        <Row>
-          <Col md={6}>
-            <Card className="mb-4">
-              <Card.Header>Your Course Reviews</Card.Header>
+        <div className="row">
+          <div className="col-md-6 mb-4">
+            <div className="card shadow-sm p-3 mb-4">
+              <h5 className="fw-bold mb-3">Your Course Reviews</h5>
               <ListGroup variant="flush">
                 {reviews.length === 0 ? (
                   <ListGroup.Item>No reviews yet.</ListGroup.Item>
@@ -83,28 +82,24 @@ const UserDashboard: React.FC<UserDashboardProps> = ({ user }) => {
                   ))
                 )}
               </ListGroup>
-            </Card>
-
-            <Card>
-              <Card.Header>Your Stats</Card.Header>
-              <Card.Body>
-                <p><strong>Reviews Submitted:</strong> {reviews.length}</p>
-                <p><strong>Average Rating Given:</strong> {averageRating}</p>
-                <div className="d-flex gap-2">
-                  <Button variant="outline-primary" onClick={() => router.push('/dashboard/tutorial')}>
-                    Help & Tutorial
-                  </Button>
-                  <Button variant="outline-danger" onClick={() => alert('Logging out...')}>
-                    Log Out
-                  </Button>
-                </div>
-              </Card.Body>
-            </Card>
-          </Col>
-
-          <Col md={6}>
-            <Card className="mb-4">
-              <Card.Header>Saved Courses</Card.Header>
+            </div>
+            <div className="card shadow-sm p-3">
+              <h5 className="fw-bold mb-3">Your Stats</h5>
+              <p><strong>Reviews Submitted:</strong> {reviews.length}</p>
+              <p><strong>Average Rating Given:</strong> {averageRating}</p>
+              <div className="d-flex gap-2">
+                <Button variant="outline-primary" onClick={() => router.push('/dashboard/tutorial')}>
+                  Help & Tutorial
+                </Button>
+                <Button variant="outline-danger" onClick={() => alert('Logging out...')}>
+                  Log Out
+                </Button>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-6 mb-4">
+            <div className="card shadow-sm p-3">
+              <h5 className="fw-bold mb-3">Saved Courses</h5>
               <ListGroup variant="flush">
                 {savedCourses.length === 0 ? (
                   <ListGroup.Item>No saved courses.</ListGroup.Item>
@@ -116,11 +111,11 @@ const UserDashboard: React.FC<UserDashboardProps> = ({ user }) => {
                   ))
                 )}
               </ListGroup>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
-    </main>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
