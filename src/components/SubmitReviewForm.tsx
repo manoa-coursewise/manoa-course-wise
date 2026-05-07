@@ -82,6 +82,12 @@ const SubmitReviewForm: React.FC<SubmitReviewFormProps> = ({ courses }) => {
 
   const onSubmit = async (data: ReviewFormData, selectedTags: string[]) => {
     const selectedCourse = courses.find((c) => c.classId === data.courseCode);
+    // Use the actual session email, not the form field which might be stale
+    const userEmail = session?.user?.email || '';
+    if (!userEmail) {
+      swal('Error', 'You must be logged in to submit a review', 'error');
+      return;
+    }
     await addReview({
       courseCode: data.courseCode,
       courseName: selectedCourse?.name ?? data.courseCode,
@@ -91,7 +97,7 @@ const SubmitReviewForm: React.FC<SubmitReviewFormProps> = ({ courses }) => {
       clarity: Number(data.clarity),
       text: data.text,
       anonymous: Boolean(data.anonymous),
-      authorEmail: data.anonymous ? null : data.authorEmail,
+      authorEmail: data.anonymous ? null : userEmail,
       tags: selectedTags,
       semesterTaken: data.semesterTaken || null,
     });
@@ -244,8 +250,6 @@ const SubmitReviewForm: React.FC<SubmitReviewFormProps> = ({ courses }) => {
                     })}
                   </div>
                 </Form.Group>
-
-                <input type="hidden" {...register('authorEmail')} value={currentUser} />
 
                 <Form.Group className="form-group">
                   <Row className="pt-3 justify-content-center">
