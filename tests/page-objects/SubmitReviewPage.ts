@@ -37,17 +37,13 @@ export class SubmitReviewPage extends BasePage {
 
     // Fill in a required text review.
     await this.page.locator('textarea[name="text"]').fill(reviewText);
-    // Submit the form and wait for the redirect to the course details page.
-    await Promise.all([
-      this.page.waitForURL((url) => url.pathname.startsWith('/courses/details/'), {
-        timeout: 30000,
-        waitUntil: 'domcontentloaded',
-      }),
-      this.page.getByRole('button', { name: /submit/i }).click(),
-    ]);
+    // Submit the form.
+    await this.page.getByRole('button', { name: /submit/i }).click();
   }
 
   async expectRedirectedAfterSubmit() {
-    await expect(this.page).toHaveURL(/\/courses\/details\//);
+    // The server action uses Next.js soft (client-side) navigation, so we poll
+    // the URL directly rather than waiting for a browser navigation event.
+    await expect(this.page).toHaveURL(/\/courses\/details\//, { timeout: 30000 });
   }
 }
