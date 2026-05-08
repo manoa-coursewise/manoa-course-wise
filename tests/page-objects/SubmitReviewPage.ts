@@ -14,24 +14,33 @@ export class SubmitReviewPage extends BasePage {
     await expect(this.page.getByRole('heading', { name: 'Submit Review' })).toBeVisible({ timeout: 5000 });
   }
 
-  async submitReview(reviewText: string) {
-    // Pick a course that has at least one professor option.
+  async submitReview(reviewText: string, selection?: { courseCode: string; professor: string }) {
+    // Pick a course/professor combination that is guaranteed to be valid.
     const courseSelect = this.page.locator('select[name="courseCode"]');
     const professorSelect = this.page.locator('select[name="professor"]');
 
-    const courseValues = await courseSelect.locator('option').evaluateAll((options) =>
-      options
-        .map((option) => (option as HTMLOptionElement).value)
-        .filter((value) => Boolean(value)),
-    );
+    if (selection) {
+      await courseSelect.selectOption(selection.courseCode);
+      await expect(professorSelect.locator(`option[value="${selection.professor}"]`)).toHaveCount(1, { timeout: 5000 });
+      await professorSelect.selectOption(selection.professor);
+    } else {
+      const courseValues = await courseSelect.locator('option').evaluateAll((options) =>
+        options
+          .map((option) => (option as HTMLOptionElement).value)
+          .filter((value) => Boolean(value)),
+      );
 
-    for (const courseValue of courseValues) {
-      await courseSelect.selectOption(courseValue);
-      await this.page.waitForTimeout(100);
-      const professorCount = await professorSelect.locator('option').count();
-      if (professorCount > 0) {
-        await professorSelect.selectOption({ index: 0 });
-        break;
+      for (const courseValue of courseValues) {
+        await courseSelect.selectOption(courseValue);
+        const professorValues = await professorSelect.locator('option').evaluateAll((options) =>
+          options
+            .map((option) => (option as HTMLOptionElement).value)
+            .filter((value) => Boolean(value)),
+        );
+        if (professorValues.length > 0) {
+          await professorSelect.selectOption(professorValues[0]);
+          break;
+        }
       }
     }
 
