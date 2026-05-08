@@ -37,25 +37,17 @@ export class SubmitReviewPage extends BasePage {
 
     // Fill in a required text review.
     await this.page.locator('textarea[name="text"]').fill(reviewText);
-    // Submit the form.
-    await this.page.getByRole('button', { name: /submit/i }).click();
+    // Submit the form and wait for the redirect to the course details page.
+    await Promise.all([
+      this.page.waitForURL((url) => url.pathname.startsWith('/courses/details/'), {
+        timeout: 30000,
+        waitUntil: 'domcontentloaded',
+      }),
+      this.page.getByRole('button', { name: /submit/i }).click(),
+    ]);
   }
 
   async expectRedirectedAfterSubmit() {
-    // Accept either expected redirect or visible success message.
-    try {
-      await this.page.waitForURL(
-        (url) => url.pathname.startsWith('/courses/details/'),
-        { timeout: 30000, waitUntil: 'domcontentloaded' },
-      );
-      return;
-    } catch {
-      // URL can already be updated even if Playwright times out waiting for full load.
-      const currentPath = new URL(this.page.url()).pathname;
-      if (currentPath.startsWith('/courses/details/')) {
-        return;
-      }
-      await expect(this.page.getByText('Your review has been submitted')).toBeVisible({ timeout: 10000 });
-    }
+    await expect(this.page).toHaveURL(/\/courses\/details\//);
   }
 }
