@@ -2,14 +2,14 @@ import { prisma } from './lib/prisma';
 import { Role, Condition } from '@prisma/client';
 import { hash } from 'bcrypt';
 import * as config from '../config/settings.development.json';
-//import { courseData } from './lib/courseData';
+import { courseData } from './lib/courseData';
 
 async function main() {
   console.log('Seeding the database');
   const password = await hash('changeme', 10);
   for (const account of config.defaultAccounts) {
     const role = account.role as Role || Role.USER;
-    const username = typeof account.username === 'string'
+      const username = typeof account.username === 'string'
       ? account.username
       : account.email.split('@')[0];
     console.log(`  Creating user: ${account.email} with role: ${role}`);
@@ -19,7 +19,7 @@ async function main() {
       create: {
         email: account.email,
         username,
-        password,
+      password,
         role,
       },
     });
@@ -40,34 +40,34 @@ async function main() {
     });
   }
 
-  // for (const course of courseData.filter((entry) => entry.code.startsWith('ICS '))) {
-  //   const createdCourse = await prisma.course.upsert({
-  //     where: { classId: course.code },
-  //     update: {
-  //       name: course.name,
-  //     },
-  //     create: {
-  //       classId: course.code,
-  //       name: course.name,
-  //     },
-  //   });
-  //
-  //   for (const professor of [...new Set(course.professors.map((name) => name.trim()).filter(Boolean))]) {
-  //     await prisma.professor.upsert({
-  //       where: {
-  //         courseId_name: {
-  //           courseId: createdCourse.id,
-  //           name: professor,
-  //         },
-  //       },
-  //       update: {},
-  //       create: {
-  //         courseId: createdCourse.id,
-  //         name: professor,
-  //       },
-  //     });
-  //   }
-  // }
+  for (const course of courseData.filter((entry) => entry.code.startsWith('ICS '))) {
+    const createdCourse = await prisma.course.upsert({
+      where: { classId: course.code },
+      update: {
+        name: course.name,
+      },
+      create: {
+        classId: course.code,
+        name: course.name,
+      },
+    });
+
+    for (const professor of [...new Set(course.professors.map((name) => name.trim()).filter(Boolean))]) {
+      await prisma.professor.upsert({
+        where: {
+          courseId_name: {
+            courseId: createdCourse.id,
+            name: professor,
+          },
+        },
+        update: {},
+        create: {
+          courseId: createdCourse.id,
+          name: professor,
+        },
+      });
+    }
+  }
 
   const ics311 = await prisma.course.findUnique({
     where: { classId: 'ICS 311' },

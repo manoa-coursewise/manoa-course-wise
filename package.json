@@ -13,7 +13,8 @@
     "seed": "npx tsx src/seed.ts",
     "import:ics": "npx tsx src/scripts/importIcsCourses.ts",
     "import:math": "npx tsx src/scripts/importMathCourses.ts",
-    "playwright": "npx playwright test"
+    "playwright": "npx playwright test",
+    "playwright-development": "npx playwright test --headed"
   },
   "prisma": {
     "seed": "tsx src/seed.ts"

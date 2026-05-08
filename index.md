@@ -1,3 +1,5 @@
+[![ci-manoa-course-wise](https://github.com/manoa-coursewise/manoa-course-wise/actions/workflows/ci.yml/badge.svg)](https://github.com/manoa-coursewise/manoa-course-wise/actions/workflows/ci.yml)
+
 ![](https://github.com/ics-software-engineering/nextjs-application-template/raw/main/doc/landing-page.png)
 
 nextjs-application-template is a sample Next.js 16 application that illustrates:
