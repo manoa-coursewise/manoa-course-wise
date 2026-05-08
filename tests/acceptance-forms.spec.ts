@@ -3,8 +3,33 @@ import { SignInPage } from './page-objects/SignInPage';
 import { SignUpPage } from './page-objects/SignUpPage';
 import { AddStuffPage } from './page-objects/AddStuffPage';
 import { SubmitReviewPage } from './page-objects/SubmitReviewPage';
+import { prisma } from '../src/lib/prisma';
 
-const BASE_URL = process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:3000';
+const REVIEW_COURSE_CODE = 'PLAYWRIGHT 101';
+const REVIEW_PROFESSOR_NAME = 'Playwright Test Professor';
+
+async function ensureReviewSubmissionData() {
+  const course = await prisma.course.upsert({
+    where: { classId: REVIEW_COURSE_CODE },
+    update: {},
+    create: { classId: REVIEW_COURSE_CODE, name: 'Playwright Test Course' },
+    select: { id: true },
+  });
+
+  await prisma.professor.upsert({
+    where: {
+      courseId_name: {
+        courseId: course.id,
+        name: REVIEW_PROFESSOR_NAME,
+      },
+    },
+    update: {},
+    create: {
+      courseId: course.id,
+      name: REVIEW_PROFESSOR_NAME,
+    },
+  });
+}
 
 // ----- SIGN UP FORM -----
 test.describe('Sign up form', () => {
@@ -51,11 +76,15 @@ test.describe('Add Stuff form', () => {
 // ----- SUBMIT REVIEW FORM -----
 test.describe('Submit Review form', () => {
   test('user can submit a course review', async ({ getUserPage }) => {
+    await ensureReviewSubmissionData();
     const page = await getUserPage('john@foo.com', 'changeme');
     const reviewPage = new SubmitReviewPage(page);
     await reviewPage.open();
     await reviewPage.expectLoaded();
-    await reviewPage.submitReview('This course was very informative and well structured. Highly recommend.');
+    await reviewPage.submitReview('This course was very informative and well structured. Highly recommend.', {
+      courseCode: REVIEW_COURSE_CODE,
+      professor: REVIEW_PROFESSOR_NAME,
+    });
     await reviewPage.expectRedirectedAfterSubmit();
   });
 });
