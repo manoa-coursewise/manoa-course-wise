@@ -21,8 +21,7 @@ export class SubmitReviewPage extends BasePage {
 
     if (selection) {
       await courseSelect.selectOption(selection.courseCode);
-      await expect(professorSelect.locator(`option[value="${selection.professor}"]`)).toHaveCount(1, { timeout: 5000 });
-      await professorSelect.selectOption(selection.professor);
+      await professorSelect.selectOption(selection.professor, { timeout: 5000 });
     } else {
       const courseValues = await courseSelect.locator('option').evaluateAll((options) =>
         options
