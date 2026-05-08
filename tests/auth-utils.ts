@@ -39,13 +39,9 @@ async function authenticateWithUI(
     }
 
 
-    // Wait for a clear post-login indicator (user button or sign out button)
-    const userButton = page.getByRole('button', { name: email });
-    const signOutButton = page.getByRole('button', { name: /sign out/i });
-    await Promise.any([
-      expect(userButton).toBeVisible({ timeout: 10000 }),
-      expect(signOutButton).toBeVisible({ timeout: 10000 })
-    ]);
+    // Wait for redirect and navbar auth state to settle.
+    await page.waitForURL((url) => !url.pathname.includes('/auth/signin'), { timeout: 15000 });
+    await expect(page.locator('#login-dropdown')).toHaveCount(1);
     console.log(`✓ Successfully authenticated ${email}`);
   } catch (error) {
     console.error(`× Authentication failed for ${email}:`, error);

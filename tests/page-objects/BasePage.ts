@@ -11,7 +11,12 @@ export class BasePage {
 
   async goto(path: string) {
     const url = path.startsWith('http') ? path : `${BASE_URL}${path}`;
-    await this.page.goto(url);
+    try {
+      await this.page.goto(url);
+    } catch {
+      // Retry once for occasional browser-side navigation interruption errors.
+      await this.page.goto(url);
+    }
     await this.page.waitForLoadState('domcontentloaded');
   }
 }

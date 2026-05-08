@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './auth-utils';
 import { SignInPage } from './page-objects/SignInPage';
 import { SignUpPage } from './page-objects/SignUpPage';
 import { AddStuffPage } from './page-objects/AddStuffPage';
@@ -34,38 +34,24 @@ test.describe('Sign in form', () => {
 
 // ----- ADD STUFF FORM -----
 test.describe('Add Stuff form', () => {
-  test.describe.configure({ mode: 'serial' });
-
-  test.beforeEach(async ({ page }) => {
-    const signInPage = new SignInPage(page);
-    await signInPage.open();
-    await signInPage.signIn('john@foo.com', 'changeme');
-    await signInPage.expectAuthenticated();
-  });
-
-  test('user can add a new item', async ({ page }) => {
+  test('user can add a new item', async ({ getUserPage }) => {
+    test.slow();
+    const page = await getUserPage('john@foo.com', 'changeme');
     const addPage = new AddStuffPage(page);
     await addPage.open();
     await addPage.expectLoaded();
-    await addPage.addItem('Test Widget', 3, 'good');
+    const itemName = `Test Widget ${Date.now()}${Math.floor(Math.random() * 1000)}`;
+    await addPage.addItem(itemName, 3, 'good');
     await addPage.expectRedirectedToList();
-    // Verify the new item appears in the list
-    await expect(page.getByRole('cell', { name: 'Test Widget' })).toBeVisible({ timeout: 5000 });
+    // Verify the new item appears in the list row.
+    await expect(page.locator('tbody tr', { hasText: itemName }).first()).toBeVisible({ timeout: 5000 });
   });
 });
 
 // ----- SUBMIT REVIEW FORM -----
 test.describe('Submit Review form', () => {
-  test.describe.configure({ mode: 'serial' });
-
-  test.beforeEach(async ({ page }) => {
-    const signInPage = new SignInPage(page);
-    await signInPage.open();
-    await signInPage.signIn('john@foo.com', 'changeme');
-    await signInPage.expectAuthenticated();
-  });
-
-  test('user can submit a course review', async ({ page }) => {
+  test('user can submit a course review', async ({ getUserPage }) => {
+    const page = await getUserPage('john@foo.com', 'changeme');
     const reviewPage = new SubmitReviewPage(page);
     await reviewPage.open();
     await reviewPage.expectLoaded();

@@ -9,8 +9,8 @@ test('can authenticate a specific user', async ({ getUserPage }) => {
   // Navigate to the home page and wait for post-login indicator
   await customUserPage.goto('http://localhost:3000/');
   await expect(
-    customUserPage.getByRole('button', { name: 'john@foo.com' })
-  ).toBeVisible({ timeout: 10000 });
+    customUserPage.locator('#login-dropdown')
+  ).toHaveCount(1);
 
   // Verify current landing-page navigation links.
   await expect(

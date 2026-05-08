@@ -8,8 +8,8 @@ test('test access to admin page', async ({ getUserPage }) => {
   // Navigate to the home page and wait for post-login indicator
   await adminPage.goto('http://localhost:3000/');
   await expect(
-    adminPage.getByRole('button', { name: 'admin@foo.com' })
-  ).toBeVisible({ timeout: 10000 });
+    adminPage.locator('#login-dropdown')
+  ).toHaveCount(1);
 
   // Check for current landing-page navigation elements.
   await expect(

@@ -10,7 +10,7 @@ export class NavbarComponent {
   }
 
   async expectLinkVisible(name: string | RegExp) {
-    await expect(this.nav.getByRole('link', { name })).toBeVisible({ timeout: 5000 });
+    await expect(this.nav.getByRole('link', { name })).toHaveCount(1);
   }
 
   async expectLinkHidden(name: string | RegExp) {

@@ -1,5 +1,4 @@
-import { test, expect } from '@playwright/test';
-import { SignInPage } from './page-objects/SignInPage';
+import { test, expect } from './auth-utils';
 import { NavbarComponent } from './page-objects/NavbarComponent';
 
 const BASE_URL = process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:3000';
@@ -31,17 +30,9 @@ test.describe('Public pages are available', () => {
 test.describe('Authenticated pages are available', () => {
   test.describe.configure({ mode: 'serial' });
 
-  let signInPage: SignInPage;
-
-  test.beforeEach(async ({ page }) => {
-    signInPage = new SignInPage(page);
-    await signInPage.open();
-    await signInPage.signIn('john@foo.com', 'changeme');
-    await signInPage.expectAuthenticated();
-  });
-
-  test('navbar shows correct links after login', async ({ page }) => {
-    await page.goto(BASE_URL);
+  test('navbar shows correct links after login', async ({ getUserPage }) => {
+    const page = await getUserPage('john@foo.com', 'changeme');
+    await page.goto(`${BASE_URL}/dashboard`);
     const navbar = new NavbarComponent(page);
     await navbar.expectLinkVisible('Search Courses');
     await navbar.expectLinkVisible('Professors');
@@ -49,32 +40,38 @@ test.describe('Authenticated pages are available', () => {
     await navbar.expectLinkHidden('Admin');
   });
 
-  test('search courses page loads', async ({ page }) => {
-    await page.goto(`${BASE_URL}/courses`);
+  test('search courses page loads', async ({ getUserPage }) => {
+    const page = await getUserPage('john@foo.com', 'changeme');
+    await page.goto(`${BASE_URL}/courses/search`);
     await expect(page.locator('body')).toBeVisible();
   });
 
-  test('professors page loads', async ({ page }) => {
+  test('professors page loads', async ({ getUserPage }) => {
+    const page = await getUserPage('john@foo.com', 'changeme');
     await page.goto(`${BASE_URL}/professors`);
     await expect(page.locator('body')).toBeVisible();
   });
 
-  test('add stuff page loads', async ({ page }) => {
+  test('add stuff page loads', async ({ getUserPage }) => {
+    const page = await getUserPage('john@foo.com', 'changeme');
     await page.goto(`${BASE_URL}/add`);
     await expect(page.getByRole('heading', { name: 'Add Stuff' })).toBeVisible({ timeout: 5000 });
   });
 
-  test('list stuff page loads', async ({ page }) => {
+  test('list stuff page loads', async ({ getUserPage }) => {
+    const page = await getUserPage('john@foo.com', 'changeme');
     await page.goto(`${BASE_URL}/list`);
     await expect(page.getByRole('heading', { name: 'Stuff' })).toBeVisible({ timeout: 5000 });
   });
 
-  test('submit review page loads', async ({ page }) => {
+  test('submit review page loads', async ({ getUserPage }) => {
+    const page = await getUserPage('john@foo.com', 'changeme');
     await page.goto(`${BASE_URL}/reviews/submit`);
     await expect(page.getByRole('heading', { name: 'Submit Review' })).toBeVisible({ timeout: 5000 });
   });
 
-  test('dashboard page loads', async ({ page }) => {
+  test('dashboard page loads', async ({ getUserPage }) => {
+    const page = await getUserPage('john@foo.com', 'changeme');
     await page.goto(`${BASE_URL}/dashboard`);
     await expect(page.locator('body')).toBeVisible();
   });
@@ -84,22 +81,15 @@ test.describe('Authenticated pages are available', () => {
 test.describe('Admin pages are available', () => {
   test.describe.configure({ mode: 'serial' });
 
-  let signInPage: SignInPage;
-
-  test.beforeEach(async ({ page }) => {
-    signInPage = new SignInPage(page);
-    await signInPage.open();
-    await signInPage.signIn('admin@foo.com', 'changeme');
-    await signInPage.expectAuthenticated();
-  });
-
-  test('admin navbar shows Admin link', async ({ page }) => {
-    await page.goto(BASE_URL);
+  test('admin navbar shows Admin link', async ({ getUserPage }) => {
+    const page = await getUserPage('admin@foo.com', 'changeme');
+    await page.goto(`${BASE_URL}/dashboard`);
     const navbar = new NavbarComponent(page);
     await navbar.expectLinkVisible('Admin');
   });
 
-  test('admin page loads', async ({ page }) => {
+  test('admin page loads', async ({ getUserPage }) => {
+    const page = await getUserPage('admin@foo.com', 'changeme');
     await page.goto(`${BASE_URL}/admin`);
     await expect(page.getByRole('heading', { name: 'List Stuff Admin' })).toBeVisible({ timeout: 5000 });
     await expect(page.getByRole('heading', { name: 'List Users Admin' })).toBeVisible({ timeout: 5000 });

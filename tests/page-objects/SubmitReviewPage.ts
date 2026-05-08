@@ -23,9 +23,9 @@ export class SubmitReviewPage extends BasePage {
   }
 
   async expectRedirectedAfterSubmit() {
-    // After submitting, redirected to courses or dashboard
+    // After submitting, app redirects to course details.
     await this.page.waitForURL(
-      (url) => url.pathname.startsWith('/courses') || url.pathname === '/dashboard' || url.pathname === '/',
+      (url) => url.pathname.startsWith('/courses/details/'),
       { timeout: 10000 },
     );
   }
