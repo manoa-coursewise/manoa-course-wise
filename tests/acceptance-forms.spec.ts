@@ -3,13 +3,12 @@ import { SignInPage } from './page-objects/SignInPage';
 import { SignUpPage } from './page-objects/SignUpPage';
 import { AddStuffPage } from './page-objects/AddStuffPage';
 import { SubmitReviewPage } from './page-objects/SubmitReviewPage';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '../src/lib/prisma';
 
-const BASE_URL = process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:3000';
 const REVIEW_COURSE_CODE = 'PLAYWRIGHT 101';
 const REVIEW_PROFESSOR_NAME = 'Playwright Test Professor';
 
-async function ensureReviewSubmissionData(prisma: PrismaClient) {
+async function ensureReviewSubmissionData() {
   const course = await prisma.course.upsert({
     where: { classId: REVIEW_COURSE_CODE },
     update: {},
@@ -76,18 +75,8 @@ test.describe('Add Stuff form', () => {
 
 // ----- SUBMIT REVIEW FORM -----
 test.describe('Submit Review form', () => {
-  let prisma: PrismaClient;
-
-  test.beforeAll(async () => {
-    prisma = new PrismaClient();
-  });
-
-  test.afterAll(async () => {
-    await prisma.$disconnect();
-  });
-
   test('user can submit a course review', async ({ getUserPage }) => {
-    await ensureReviewSubmissionData(prisma);
+    await ensureReviewSubmissionData();
     const page = await getUserPage('john@foo.com', 'changeme');
     const reviewPage = new SubmitReviewPage(page);
     await reviewPage.open();
