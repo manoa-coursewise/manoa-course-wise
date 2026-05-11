@@ -50,20 +50,8 @@ export class SubmitReviewPage extends BasePage {
   }
 
   async expectRedirectedAfterSubmit() {
-    // Accept either expected redirect or visible success message.
-    try {
-      await this.page.waitForURL(
-        (url) => url.pathname.startsWith('/courses/details/'),
-        { timeout: 30000, waitUntil: 'domcontentloaded' },
-      );
-      return;
-    } catch {
-      // URL can already be updated even if Playwright times out waiting for full load.
-      const currentPath = new URL(this.page.url()).pathname;
-      if (currentPath.startsWith('/courses/details/')) {
-        return;
-      }
-      await expect(this.page.getByText('Your review has been submitted')).toBeVisible({ timeout: 10000 });
-    }
+    // The server action uses Next.js soft (client-side) navigation, so we poll
+    // the URL directly rather than waiting for a browser navigation event.
+    await expect(this.page).toHaveURL(/\/courses\/details\//, { timeout: 30000 });
   }
 }
